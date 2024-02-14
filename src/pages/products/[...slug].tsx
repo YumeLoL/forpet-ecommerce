@@ -6,7 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Navigation, ProductsList } from '@/components'
 import { Pagination } from '@/components/ui'
 import { PrimaryLayout } from '@/layouts'
-import { CollectionType, ProductColor, ProductSize } from '@prisma/client'
+import { CollectionType, ProductBrand, ProductSize } from '@prisma/client'
 import { api } from '@/utils/api'
 // import { ProductItem, Skeleton } from '@/components/product/ProductItem'
 
@@ -34,7 +34,7 @@ const Products: NextPageWithLayout = () => {
     rate,
     page = 1,
     sizes,
-    colors,
+    brand,
     cate,
     gte,
     lte,
@@ -44,7 +44,7 @@ const Products: NextPageWithLayout = () => {
     page: number | undefined
     price: string | undefined
     sizes: string | string[] | undefined
-    colors: string | string[] | undefined
+    brand: string | string[] | undefined
     cate: string | string[] | undefined
     gte: number | undefined
     lte: number | undefined
@@ -58,13 +58,13 @@ const Products: NextPageWithLayout = () => {
       slug: slug && slug[1],
       cate: [cate].flat(1).filter(Boolean) as string[],
       sizes: [sizes].flat(1).filter(Boolean) as ProductSize[],
-      colors: [colors].flat(1).filter(Boolean) as ProductColor[],
+      brand: [brand].flat(1).filter(Boolean) as ProductBrand[],
       page: page && Number(page),
       rate: rate && Number(rate),
       gte: gte && Number(gte),
       lte: lte && Number(lte),
     }),
-    [colors, page, gte, lte, rate, sizes, slug, cate],
+    [brand, page, gte, lte, rate, sizes, slug, cate],
   )
 
   const { data, isLoading, isPreviousData } =
