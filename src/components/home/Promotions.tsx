@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { useTranslation } from 'next-i18next'
 import promobanner1 from '../../../public/images/home-5.webp'
 import promobanner2 from '../../../public/images/home-2.webp'
 import promobanner3 from '../../../public/images/home-3.webp'
