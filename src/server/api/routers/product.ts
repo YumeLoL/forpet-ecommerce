@@ -2,7 +2,7 @@ import { z } from 'zod'
 import {
   CollectionType,
   Prisma,
-  ProductColor,
+  ProductBrand,
   ProductSize,
 } from '@prisma/client'
 import { publicProcedure, createTRPCRouter } from '../trpc'
@@ -37,7 +37,7 @@ export const productRouter = createTRPCRouter({
         gte: z.number().optional(),
         lte: z.number().optional(),
         sizes: z.nativeEnum(ProductSize).array().optional(),
-        colors: z.nativeEnum(ProductColor).array().optional(),
+        brand: z.nativeEnum(ProductBrand).array().optional(),
         cate: z.string().array().optional(),
       }),
     )
@@ -50,7 +50,7 @@ export const productRouter = createTRPCRouter({
         gte = 0,
         lte = 1000000,
         sizes = [],
-        colors = [],
+        brand = [],
         cate = [],
       } = input
 
@@ -73,7 +73,7 @@ export const productRouter = createTRPCRouter({
         rate: rate ? { gte: rate } : undefined,
         price: { gte, lte },
         sizes: sizes.length > 0 ? { hasSome: sizes } : undefined,
-        colors: colors.length > 0 ? { hasSome: colors } : undefined,
+        brand: brand.length > 0 ? { hasSome: brand } : undefined,
         collectionId:
           collectionIds.length > 0 ? { in: collectionIds } : undefined,
       }

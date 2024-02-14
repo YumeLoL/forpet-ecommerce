@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 // category & subCategory
@@ -31,7 +32,7 @@ model Product {
   rate         Float
   published    Boolean          @default(false)
   images       ProductImage[]
-  colors       ProductColor[]
+  brand        ProductBrand
   sizes        ProductSize[]
   types        CollectionType[]
   collection   Collection       @relation(fields: [collectionId], references: [id])
@@ -100,27 +101,21 @@ enum CollectionType {
 }
 
 enum ProductSize {
-  S
-  M
-  L
-  XL
-  XXL
-  XXXL
   EACH
   KG2
   KG4
   KG8
 }
 
-enum ProductColor {
-  BLACK
-  WHITE
-  GRAY
-  RED
-  ORANGE
-  YELLOW
-  GREEN
-  PINK
-  BLUE
-  PURPLE
+enum ProductBrand {
+  ROYAL_CANIN
+  ADVANCE
+  HILLS_PRESCRIPTION_DIET
+  ZIWI
+  DINE
+  KONG
+  MEALS_FOR_MUTTS
+  PAWS_FOR_LIFE
+  SUPERCOAT
+  BLACK_HAWK
 }

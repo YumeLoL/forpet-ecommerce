@@ -4,12 +4,12 @@ export const products: Prisma.ProductCreateInput[] = [
   {
     name: 'Kitten Dry Cat Food',
     description: `This premium dry kitten food contains high quality, highly digestible nutrients to help support healthy bone and muscle development. It includes an exclusive combinations of nutrients to maintain optimal digestive health and stool quality, as well as antioxidants and prebiotics to support your kittens natural immune defences.`,
-    price: 35.0,
-    rate: 4.2,
+    price: 10.0,
+    rate: 4.0,
     published: true,
     types: ['CAT'],
     sizes: ['EACH'],
-    colors: ['BLACK'],
+    brand: 'ROYAL_CANIN',
     collection: {
       connect: {
         id: 6,
@@ -35,12 +35,12 @@ export const products: Prisma.ProductCreateInput[] = [
   {
     name: 'Kitten Wet Cat Food',
     description: `This premium dry kitten food contains high quality, highly digestible nutrients to help support healthy bone and muscle development. It includes an exclusive combinations of nutrients to maintain optimal digestive health and stool quality, as well as antioxidants and prebiotics to support your kittens natural immune defences.`,
-    price: 35.0,
-    rate: 4.2,
+    price: 15.0,
+    rate: 4.6,
     published: true,
     types: ['CAT'],
     sizes: ['EACH'],
-    colors: ['BLACK'],
+    brand: 'ADVANCE',
     collection: {
       connect: {
         id: 7,
@@ -67,14 +67,14 @@ export const products: Prisma.ProductCreateInput[] = [
     name: 'Kitten Litter',
     description: `This premium dry kitten food contains high quality, highly digestible nutrients to help support healthy bone and muscle development. It includes an exclusive combinations of nutrients to maintain optimal digestive health and stool quality, as well as antioxidants and prebiotics to support your kittens natural immune defences.`,
     price: 35.0,
-    rate: 4.2,
+    rate: 3.2,
     published: true,
     types: ['CAT'],
     sizes: ['EACH'],
-    colors: ['BLACK'],
+    brand: 'HILLS_PRESCRIPTION_DIET',
     collection: {
       connect: {
-        id: 8,
+        id: 9,
       },
     },
     images: {
@@ -97,15 +97,15 @@ export const products: Prisma.ProductCreateInput[] = [
   {
     name: 'Kitten Tofu Litter',
     description: `This premium dry kitten food contains high quality, highly digestible nutrients to help support healthy bone and muscle development. It includes an exclusive combinations of nutrients to maintain optimal digestive health and stool quality, as well as antioxidants and prebiotics to support your kittens natural immune defences.`,
-    price: 35.0,
-    rate: 4.2,
+    price: 38.0,
+    rate: 4.0,
     published: true,
     types: ['CAT'],
     sizes: ['EACH'],
-    colors: ['BLACK'],
+    brand: 'ZIWI',
     collection: {
       connect: {
-        id: 8,
+        id: 10,
       },
     },
     images: {
@@ -128,15 +128,15 @@ export const products: Prisma.ProductCreateInput[] = [
   {
     name: 'Kitten Paper Litter',
     description: `This premium dry kitten food contains high quality, highly digestible nutrients to help support healthy bone and muscle development. It includes an exclusive combinations of nutrients to maintain optimal digestive health and stool quality, as well as antioxidants and prebiotics to support your kittens natural immune defences.`,
-    price: 35.0,
-    rate: 4.2,
+    price: 25.0,
+    rate: 4.8,
     published: true,
     types: ['CAT'],
     sizes: ['EACH'],
-    colors: ['BLACK'],
+    brand: 'KONG',
     collection: {
       connect: {
-        id: 8,
+        id: 11,
       },
     },
     images: {
@@ -159,15 +159,15 @@ export const products: Prisma.ProductCreateInput[] = [
   {
     name: 'Kitten Paper Litter',
     description: `This premium dry kitten food contains high quality, highly digestible nutrients to help support healthy bone and muscle development. It includes an exclusive combinations of nutrients to maintain optimal digestive health and stool quality, as well as antioxidants and prebiotics to support your kittens natural immune defences.`,
-    price: 35.0,
-    rate: 4.2,
+    price: 28.0,
+    rate: 4.9,
     published: true,
     types: ['CAT'],
     sizes: ['EACH'],
-    colors: ['BLACK'],
+    brand: 'PAWS_FOR_LIFE',
     collection: {
       connect: {
-        id: 8,
+        id: 11,
       },
     },
     images: {

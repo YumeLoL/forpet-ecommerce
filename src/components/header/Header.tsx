@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { useTranslation } from 'next-i18next'
 import { Transition } from '@headlessui/react'
 import { IconType } from 'react-icons'
 import { FiUser, FiHeart, FiShoppingBag } from 'react-icons/fi'
@@ -14,7 +13,7 @@ import { BottomNavigation } from '@/components'
 import Logo from '../ui/Logo'
 
 export interface NavLink {
-  name: 'sale' | 'men' | 'cat' | 'dog' | 'brand' | 'blog' | 'contacts'
+  name: 'sale' | 'cat' | 'dog' | 'brand' | 'blog' | 'contacts'
   href: string
   collapsible?: boolean
 }
@@ -35,56 +34,55 @@ export const sideNavLinks: [string, IconType][] = [
 ]
 
 export const Header = ({ collections }: { collections: Collections }) => {
-  const { t } = useTranslation('header')
-
   const [hoveredNavLink, setHoveredNavLink] = useState<NavLink | null>()
 
-  const handleShowMenu = (navLink: NavLink) => setHoveredNavLink(navLink)
+  const handleShowMenu = (navLink: NavLink) => {
+    console.log('navLink', navLink)
+
+    setHoveredNavLink(navLink)
+    console.log('hover', hoveredNavLink)
+  }
   const handleCloseMenu = () => setHoveredNavLink(null)
 
   return (
     <header>
       <TopBar />
       <div className="relative ">
-        <div className=" bg-primary-light w-full">
+        <div className=" bg-green-300 w-full">
           <div className="mx-auto py-2 flex h-full items-center justify-between px-4 max-w-7xl">
             <div className="mr-5 flex shrink-0 items-center gap-4 w-fit">
               <Logo theme="white" />
               <Search onSearch={(value) => console.log(value)} />
             </div>
 
-            <Link
-              href="/"
-              className="mr-5 flex flex-col text-sm text-white shrink-0 items-right gap-1 items-end align-baseline "
-            >
+            <div className="mr-5 hidden md:flex flex-col text-sm text-white shrink-0 items-right gap-1 items-end align-baseline ">
               <p>Save 30% on your first Auto Delivery</p>
-              <Link
-                href="/"
-                className="text-xs decoration-underline underline-offset-2"
-              >
+              <Link href="/" className="text-xs decoration-underline">
                 Learn More
               </Link>
-            </Link>
+            </div>
           </div>
         </div>
 
-        <div className="bg-primary-darker">
+        <div className="bg-green-800">
           <div className="mx-auto flex h-full items-center justify-between px-4 max-w-7xl">
             <ul className="ml-auto hidden h-full md:flex ">
               {navLinks.map((item, index) => (
                 <li
-                  className={`py-2 font-medium text-white transition-colors ${
-                    hoveredNavLink === item && 'bg-white text-[#007483]'
-                  } ${index === 0 && 'bg-yellow-700'}`}
+                  className={`py-2 font-medium transition-colors ${
+                    hoveredNavLink === item
+                      ? 'bg-white text-green-700'
+                      : 'text-white'
+                  } ${index === 0 && 'bg-yellow-900 text-white'}`}
                   key={index}
-                  onClick={() => handleShowMenu(item)}
+                  onMouseEnter={() => handleShowMenu(item)}
                   onMouseLeave={handleCloseMenu}
                 >
                   <p
                     className="flex h-full items-center px-5 cursor-pointer"
                     onClick={handleCloseMenu}
                   >
-                    {t(item.name)}
+                    {item.name.toUpperCase()}
                   </p>
                 </li>
               ))}

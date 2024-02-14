@@ -11,7 +11,7 @@ function Logo({ theme }: Props) {
   return (
     <Link href="/">
       <div
-        className={`h-20 w-20 border-4 ${theme === 'white' ? 'border-white text-white' : 'bg-primary-light border-primary-darker text-white'} rounded-full text-sm  font-bold `}
+        className={`h-20 w-20 border-4 ${theme === 'white' ? 'border-white text-white' : 'bg-green-300 border-green-800 text-white'} rounded-full text-sm  font-bold `}
       >
         <div className="flex flex-col h-full justify-center items-center">
           <p>FOR</p>
