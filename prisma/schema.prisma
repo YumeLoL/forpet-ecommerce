@@ -3,9 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // uses connection pooling
+  // directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 // category & subCategory
@@ -22,21 +22,36 @@ model Collection {
   products  Product[]
 }
 
+model Merchant {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  name      String    @db.VarChar(255)
+  email     String    @db.VarChar(255)
+  phone     String    @db.VarChar(255)
+  brandName String    @db.VarChar(255)
+  slug      String    @unique
+  products  Product[]
+  isActive  Boolean   @default(false)
+  status    Status
+}
+
 model Product {
   id           Int              @id @default(autoincrement())
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   name         String           @db.VarChar(255)
   description  String
-  price        Float
+  slug         String           @unique
   rate         Float
   published    Boolean          @default(false)
   images       ProductImage[]
-  brand        ProductBrand
-  sizes        ProductSize[]
   types        CollectionType[]
   collection   Collection       @relation(fields: [collectionId], references: [id])
   collectionId Int
+  merchant     Merchant?        @relation(fields: [merchantId], references: [id])
+  merchantId   Int?
+  prices       ProductPrice[]
 }
 
 model ProductImage {
@@ -45,6 +60,15 @@ model ProductImage {
   imageBlur String
   Product   Product? @relation(fields: [productId], references: [id])
   productId Int?
+}
+
+model ProductPrice {
+  id        Int     @id @default(autoincrement())
+  price     Float
+  quantity  Float
+  unit      String
+  Product   Product @relation(fields: [productId], references: [id])
+  productId Int
 }
 
 model Account {
@@ -118,4 +142,10 @@ enum ProductBrand {
   PAWS_FOR_LIFE
   SUPERCOAT
   BLACK_HAWK
+}
+
+enum Status {
+  Waiting_Approval
+  Rejected
+  Approved
 }

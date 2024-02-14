@@ -6,7 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Navigation, ProductsList } from '@/components'
 import { Pagination } from '@/components/ui'
 import { PrimaryLayout } from '@/layouts'
-import { CollectionType, ProductBrand, ProductSize } from '@prisma/client'
+import { CollectionType } from '@prisma/client'
 import { api } from '@/utils/api'
 // import { ProductItem, Skeleton } from '@/components/product/ProductItem'
 
@@ -57,8 +57,6 @@ const Products: NextPageWithLayout = () => {
       types: slug && (slug[0].toUpperCase() as CollectionType),
       slug: slug && slug[1],
       cate: [cate].flat(1).filter(Boolean) as string[],
-      sizes: [sizes].flat(1).filter(Boolean) as ProductSize[],
-      brand: [brand].flat(1).filter(Boolean) as ProductBrand[],
       page: page && Number(page),
       rate: rate && Number(rate),
       gte: gte && Number(gte),
@@ -69,6 +67,8 @@ const Products: NextPageWithLayout = () => {
 
   const { data, isLoading, isPreviousData } =
     api.product.all.useQuery(queryInput)
+
+  console.log('all products', data)
 
   const pageSize = 12
 

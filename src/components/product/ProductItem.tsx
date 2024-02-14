@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { BsStarFill } from 'react-icons/bs'
 import { Product } from '@/types'
-import { numberWithCommas } from '@/utils'
+import { Button } from '@material-tailwind/react'
+import UnitButton from '../ui/UnitButton'
 
 const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent`
 
@@ -34,15 +35,23 @@ export const Skeleton = () => {
   )
 }
 
+type PriceProps = {
+  price: number
+  unit: string
+  quantity: number
+}
+
 export const ProductItem = ({
   id,
   name,
-  price,
+  merchant,
+  prices,
   rate,
   images,
   collection,
 }: Product) => {
   const [currentImage, setCurrentImage] = useState(images[0].imageURL)
+  const [selectedUnit, setSelectedUnit] = useState<PriceProps>(prices[0])
 
   const productLink = `/product/${id}/slug`
 
@@ -88,22 +97,64 @@ export const ProductItem = ({
           ))}
         </div>
         <div>
-          <h2 className="text-base font-medium">{name}</h2>
+          <h2 className="text-base font-medium">
+            <strong>{merchant?.brandName.toUpperCase()}</strong> {name}
+          </h2>
           <h3 className="text-xs font-normal capitalize text-neutral-400">
             {collection.name}
           </h3>
         </div>
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-black">
-            ${numberWithCommas(price.toFixed(2))}
-          </h3>
-          <div className="flex items-center justify-center text-xs font-medium text-neutral-500">
-            <BsStarFill size="11px" className="mr-1 text-yellow-400" />
-            <h4>{rate} (69 Reviews)</h4>
+        <div className="flex flex-col items-left justify-between gap-2">
+          <div className="flex flex-wrap gap-1">
+            {prices.map((price, index) => {
+              return (
+                <div key={index}>
+                  <UnitButton
+                    quantity={price.quantity}
+                    unit={price.unit}
+                    price={price.price}
+                    setSelectedUnit={setSelectedUnit}
+                    selectedUnit={selectedUnit}
+                  />
+                </div>
+              )
+            })}
           </div>
+
+          <div className="flex justify-between">
+            <h3 className="text-lg font-semibold text-black">
+              ${selectedUnit.price}
+            </h3>
+            <div className="flex items-center justify-center text-xs font-medium text-neutral-500">
+              <BsStarFill size="11px" className="mr-1 text-yellow-400" />
+              <h4>{rate} (69 Reviews)</h4>
+            </div>
+          </div>
+
+          <Button
+            variant="gradient"
+            className="flex items-center gap-3"
+            placeholder={undefined}
+            onClick={() => console.log('add to cart', selectedUnit)}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
+              />
+            </svg>
+            Add to Cart
+          </Button>
         </div>
       </div>
     </div>
   )
 }
-
