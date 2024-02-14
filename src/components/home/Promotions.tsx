@@ -7,17 +7,13 @@ import promobanner3 from '../../../public/images/home-3.webp'
 import promobanner4 from '../../../public/images/home-4.webp'
 
 export const Promotions = () => {
-  const { t } = useTranslation('home')
-
   return (
     <div className="bg-white">
       <div className="mx-auto flex flex-col items-center px-4 py-10 md:container">
         <span className="mb-4 text-sm font-bold uppercase text-violet-700">
-          {/* {t('promotions.promotions')} */}
           Best Price
         </span>
         <h2 className="mb-6 text-center text-3xl font-bold text-black md:text-4xl">
-          {/* {t('promotions.title')} */}
           Everyday Low Prices
         </h2>
 
