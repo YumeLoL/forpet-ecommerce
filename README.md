@@ -1,4 +1,4 @@
-# KARA Shop
+# ForPETS Store
 
 Full-stack e-commerce built with [T3 Stack](https://create.t3.gg/)
 
@@ -21,7 +21,7 @@ To run this project, you will need to add the following environment variables to
 
 ```bash
 # Database URL for prisma
-DATABASE_URL="postgresql://johndoe:randompassword@localhost:5432/mydb?schema=public"
+DATABASE_URL=
 
 # URL of the website
 NEXTAUTH_URL='http://localhost:3000'
@@ -81,3 +81,4 @@ Start the server
 ```bash
   pnpm dev
 ```
+

@@ -13,8 +13,7 @@ export const ProductPrice = () => {
         Price
       </p>
 
-      <MultiRangeSlider min={Number(gte) && 0} max={Number(lte) && 150} />
+      <MultiRangeSlider min={0} max={150} />
     </div>
   )
 }
-

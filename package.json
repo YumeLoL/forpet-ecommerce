@@ -1,20 +1,13 @@
 {
-  "name": "kara-shop",
+  "name": "ForPETS-store",
   "version": "1.0.0",
   "private": true,
-  "description": "KARA - Fullstack E-commerce made using NextJS, TypeScript, tRPC, Prisma, NextAuth and styled with Tailwind CSS",
+  "description": "ForPETS - Fullstack E-commerce made using NextJS, TypeScript, tRPC, Prisma, NextAuth and styled with Tailwind CSS",
   "author": {
-    "name": "Mehrab Mahmoudpour",
-    "email": "mehrabmpdev@gmail.com"
+    "name": "Yume Li",
+    "email": "yumeee.lol@gmail.com"
   },
-  "homepage": "https://karashop.vercel.app/",
-  "bugs": {
-    "url": "https://github.com/mehrabmp/kara-shop/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/mehrabmp/kara-shop.git"
-  },
+  "homepage": "https://forpet-ecommerce-41r0k15qg-yumelol.vercel.app/",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",

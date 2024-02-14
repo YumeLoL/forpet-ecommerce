@@ -17,7 +17,8 @@ export const Promotions = () => {
           Best Price
         </span>
         <h2 className="mb-6 text-center text-3xl font-bold text-black md:text-4xl">
-          {t('promotions.title')}
+          {/* {t('promotions.title')} */}
+          Everyday Low Prices
         </h2>
 
         <div className="grid w-full max-w-[1150px] gap-3 sm:grid-cols-4">
