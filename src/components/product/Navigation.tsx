@@ -1,7 +1,6 @@
 import { ProductCategory } from './ProductCategory'
 import { ProductPrice } from './ProductPrice'
 import { ProductRate } from './ProductRate'
-import { ProductSize } from './ProductSize'
 
 export const Navigation = () => {
   return (

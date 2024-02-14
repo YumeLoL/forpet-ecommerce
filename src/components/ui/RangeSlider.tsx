@@ -21,8 +21,6 @@ const MultiRangeSlider: React.FC<MultiRangeSliderProps> = ({ min, max }) => {
     scroll: true,
   })
 
-  console.log(minVal, maxVal)
-
   const getPercent = useCallback(
     (value: number) => Math.round(((value - min) / (max - min)) * 100),
     [min, max],
