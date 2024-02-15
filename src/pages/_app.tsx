@@ -1,6 +1,8 @@
 import type { ReactElement, ReactNode } from 'react'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
+import { Provider } from 'react-redux'
+import { store, persistor } from '../redux/store'
 import { useEffect } from 'react'
 import { appWithTranslation } from 'next-i18next'
 import { api } from '@/utils/api'
@@ -15,6 +17,7 @@ import SEO from '../../next-seo.config'
 import 'aos/dist/aos.css'
 import '@/styles/globals.css'
 import { ThemeProvider } from '@material-tailwind/react'
+import { PersistGate } from 'redux-persist/lib/integration/react'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -37,25 +40,29 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   }, [])
 
   return (
-    <SessionProvider session={pageProps.session}>
-      <main className={`${inter.variable} font-sans`}>
-        <DefaultSeo {...SEO} />
-        {getLayout(
-          <>
-            <NextNProgress
-              color="#8b5cf6"
-              height={3}
-              options={{ showSpinner: false }}
-            />
-            <ThemeProvider>
-              <Component {...pageProps} />;
-            </ThemeProvider>
-          </>,
-        )}
-        <Analytics />
-      </main>
-      <ReactQueryDevtools />
-    </SessionProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <SessionProvider session={pageProps.session}>
+          <main className={`${inter.variable} font-sans`}>
+            <DefaultSeo {...SEO} />
+            {getLayout(
+              <>
+                <NextNProgress
+                  color="#8b5cf6"
+                  height={3}
+                  options={{ showSpinner: false }}
+                />
+                <ThemeProvider>
+                  <Component {...pageProps} />;
+                </ThemeProvider>
+              </>,
+            )}
+            <Analytics />
+          </main>
+          <ReactQueryDevtools />
+        </SessionProvider>
+      </PersistGate>
+    </Provider>
   )
 }
 

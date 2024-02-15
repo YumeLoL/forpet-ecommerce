@@ -6,6 +6,7 @@ import { BsStarFill } from 'react-icons/bs'
 import { Product } from '@/types'
 import { Button } from '@material-tailwind/react'
 import UnitButton from '../ui/UnitButton'
+import { RiShoppingBasketFill } from 'react-icons/ri'
 
 const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent`
 
@@ -41,19 +42,14 @@ type PriceProps = {
   quantity: number
 }
 
-export const ProductItem = ({
-  id,
-  name,
-  merchant,
-  prices,
-  rate,
-  images,
-  collection,
-}: Product) => {
+export const ProductItem = (product: Product) => {
+  const { id, name, merchant, prices, rate, images, collection, slug } = product
   const [currentImage, setCurrentImage] = useState(images[0].imageURL)
   const [selectedUnit, setSelectedUnit] = useState<PriceProps>(prices[0])
+  const [count, setCount] = useState(1)
+  const [itemInCart] = useState(false)
 
-  const productLink = `/product/${id}/slug`
+  const productLink = `/product/${id}/${slug}`
 
   return (
     <div className="group rounded-2xl bg-white p-2">
@@ -131,28 +127,42 @@ export const ProductItem = ({
             </div>
           </div>
 
-          <Button
-            variant="gradient"
-            className="flex items-center gap-3"
-            placeholder={undefined}
-            onClick={() => console.log('add to cart', selectedUnit)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="h-5 w-5"
+          {itemInCart ? (
+            <div className="mt-3 relative flex w-full max-w-[24rem]">
+              <button
+                className="!absolute left-0 top-0 rounded font-medium text-white bg-green-500 w-8 border border-solid border-green-500 h-full"
+                onClick={() => setCount(count - 1)}
+              >
+                -
+              </button>
+              <p
+                onChange={(e) => {
+                  console.log(e)
+                }}
+                className="flex h-8 w-full justify-center items-center text-center rounded-md border border-solid border-gray-300 bg-neutral-500 p-2.5 text-gray-900 placeholder-gray-500 outline-none focus:border-gray-300"
+              >
+                {count}
+              </p>
+              <button
+                className="!absolute right-0 top-0 rounded font-medium text-white bg-green-500 w-8 border border-solid border-green-500 h-full"
+                onClick={() => setCount(count + 1)}
+              >
+                +
+              </button>
+            </div>
+          ) : (
+            <Button
+              variant="gradient"
+              size={'sm'}
+              color={'green'}
+              className="flex justify-center items-center gap-3"
+              placeholder={undefined}
+              // onClick={() => handleAddToCart(product)}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-              />
-            </svg>
-            Add to Cart
-          </Button>
+              <RiShoppingBasketFill size={20} />
+              Add to Cart
+            </Button>
+          )}
         </div>
       </div>
     </div>
