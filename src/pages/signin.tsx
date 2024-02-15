@@ -4,10 +4,10 @@ import type { NextPageWithLayout } from './_app'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { PrimaryLayout } from '@/layouts'
 import { signIn } from 'next-auth/react'
-import { BsGithub, BsTwitter } from 'react-icons/bs'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSession, signOut } from 'next-auth/react'
 
 export const getStaticProps: GetStaticProps = async ({ locale = 'en' }) => {
   return {
@@ -19,6 +19,18 @@ export const getStaticProps: GetStaticProps = async ({ locale = 'en' }) => {
 
 const Signin: NextPageWithLayout = () => {
   const { t } = useTranslation('header')
+
+  const { data, status } = useSession()
+  console.log('check session', data)
+
+  if (status === 'loading') return <h1> loading... please wait</h1>
+  if (status === 'authenticated') {
+    return (
+      <div>
+        <h1> hi {data.user?.name}</h1>
+      </div>
+    )
+  }
 
   return (
     <div className="mt-20 flex justify-center px-4">
@@ -39,22 +51,22 @@ const Signin: NextPageWithLayout = () => {
           />
           {t('auth.google')}
         </button>
-        <button
+        {/* <button
           type="button"
           className="my-1.5 flex w-full items-center justify-center gap-3 rounded-md bg-zinc-900 px-4 py-2 font-medium text-white transition hover:bg-black"
           onClick={() => signIn('github')}
         >
           <BsGithub size="1.2rem" />
           {t('auth.github')}
-        </button>
-        <button
+        </button> */}
+        {/* <button
           type="button"
           className="my-1.5 flex w-full items-center justify-center gap-3 rounded-md bg-[#1DA1F2] px-4 py-2 font-medium text-white transition hover:bg-[#0977ba]"
           onClick={() => signIn('twitter')}
         >
           <BsTwitter size="1.2rem" />
           {t('auth.twitter')}
-        </button>
+        </button> */}
         <p className="mt-10 text-xs font-normal">
           By signing in, you agree to our{' '}
           <Link href="terms-service" className="text-blue-600 hover:underline">
@@ -86,4 +98,3 @@ Signin.getLayout = function getLayout(page: ReactElement) {
 }
 
 export default Signin
-

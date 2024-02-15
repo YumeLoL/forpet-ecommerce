@@ -1,18 +1,13 @@
 import { z } from 'zod'
-import {
-  CollectionType,
-  Prisma,
-  ProductBrand,
-  ProductSize,
-} from '@prisma/client'
+import { CollectionType, Prisma } from '@prisma/client'
 import { publicProcedure, createTRPCRouter } from '../trpc'
 import { defaultCollectionSelect } from './collection'
 
-const defaultProductSelect = Prisma.validator<Prisma.ProductSelect>()({
+export const defaultProductSelect = Prisma.validator<Prisma.ProductSelect>()({
   id: true,
   name: true,
   description: true,
-  price: true,
+  slug: true,
   rate: true,
   images: {
     select: {
@@ -23,6 +18,20 @@ const defaultProductSelect = Prisma.validator<Prisma.ProductSelect>()({
   types: true,
   collection: {
     select: defaultCollectionSelect,
+  },
+  merchant: {
+    select: {
+      id: true,
+      brandName: true,
+      slug: true,
+    },
+  },
+  prices: {
+    select: {
+      price: true,
+      quantity: true,
+      unit: true,
+    },
   },
 })
 
@@ -36,8 +45,6 @@ export const productRouter = createTRPCRouter({
         rate: z.number().optional(),
         gte: z.number().optional(),
         lte: z.number().optional(),
-        sizes: z.nativeEnum(ProductSize).array().optional(),
-        brand: z.nativeEnum(ProductBrand).array().optional(),
         cate: z.string().array().optional(),
       }),
     )
@@ -49,8 +56,6 @@ export const productRouter = createTRPCRouter({
         rate = 0,
         gte = 0,
         lte = 1000000,
-        sizes = [],
-        brand = [],
         cate = [],
       } = input
 
@@ -71,9 +76,7 @@ export const productRouter = createTRPCRouter({
         types: { hasSome: [types] },
         published: true,
         rate: rate ? { gte: rate } : undefined,
-        price: { gte, lte },
-        sizes: sizes.length > 0 ? { hasSome: sizes } : undefined,
-        brand: brand.length > 0 ? { hasSome: brand } : undefined,
+        // price: { gte, lte },
         collectionId:
           collectionIds.length > 0 ? { in: collectionIds } : undefined,
       }

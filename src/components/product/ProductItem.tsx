@@ -4,7 +4,9 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { BsStarFill } from 'react-icons/bs'
 import { Product } from '@/types'
-import { numberWithCommas } from '@/utils'
+import { Button } from '@material-tailwind/react'
+import UnitButton from '../ui/UnitButton'
+import { RiShoppingBasketFill } from 'react-icons/ri'
 
 const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent`
 
@@ -34,17 +36,20 @@ export const Skeleton = () => {
   )
 }
 
-export const ProductItem = ({
-  id,
-  name,
-  price,
-  rate,
-  images,
-  collection,
-}: Product) => {
-  const [currentImage, setCurrentImage] = useState(images[0].imageURL)
+type PriceProps = {
+  price: number
+  unit: string
+  quantity: number
+}
 
-  const productLink = `/product/${id}/slug`
+export const ProductItem = (product: Product) => {
+  const { id, name, merchant, prices, rate, images, collection, slug } = product
+  const [currentImage, setCurrentImage] = useState(images[0].imageURL)
+  const [selectedUnit, setSelectedUnit] = useState<PriceProps>(prices[0])
+  const [count, setCount] = useState(1)
+  const [itemInCart] = useState(false)
+
+  const productLink = `/product/${id}/${slug}`
 
   return (
     <div className="group rounded-2xl bg-white p-2">
@@ -88,22 +93,78 @@ export const ProductItem = ({
           ))}
         </div>
         <div>
-          <h2 className="text-base font-medium">{name}</h2>
+          <h2 className="text-base font-medium">
+            <strong>{merchant?.brandName.toUpperCase()}</strong> {name}
+          </h2>
           <h3 className="text-xs font-normal capitalize text-neutral-400">
             {collection.name}
           </h3>
         </div>
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-black">
-            ${numberWithCommas(price.toFixed(2))}
-          </h3>
-          <div className="flex items-center justify-center text-xs font-medium text-neutral-500">
-            <BsStarFill size="11px" className="mr-1 text-yellow-400" />
-            <h4>{rate} (69 Reviews)</h4>
+        <div className="flex flex-col items-left justify-between gap-2">
+          <div className="flex flex-wrap gap-1">
+            {prices.map((price, index) => {
+              return (
+                <div key={index}>
+                  <UnitButton
+                    quantity={price.quantity}
+                    unit={price.unit}
+                    price={price.price}
+                    setSelectedUnit={setSelectedUnit}
+                    selectedUnit={selectedUnit}
+                  />
+                </div>
+              )
+            })}
           </div>
+
+          <div className="flex justify-between">
+            <h3 className="text-lg font-semibold text-black">
+              ${selectedUnit.price}
+            </h3>
+            <div className="flex items-center justify-center text-xs font-medium text-neutral-500">
+              <BsStarFill size="11px" className="mr-1 text-yellow-400" />
+              <h4>{rate} (69 Reviews)</h4>
+            </div>
+          </div>
+
+          {itemInCart ? (
+            <div className="mt-3 relative flex w-full max-w-[24rem]">
+              <button
+                className="!absolute left-0 top-0 rounded font-medium text-white bg-green-500 w-8 border border-solid border-green-500 h-full"
+                onClick={() => setCount(count - 1)}
+              >
+                -
+              </button>
+              <p
+                onChange={(e) => {
+                  console.log(e)
+                }}
+                className="flex h-8 w-full justify-center items-center text-center rounded-md border border-solid border-gray-300 bg-neutral-500 p-2.5 text-gray-900 placeholder-gray-500 outline-none focus:border-gray-300"
+              >
+                {count}
+              </p>
+              <button
+                className="!absolute right-0 top-0 rounded font-medium text-white bg-green-500 w-8 border border-solid border-green-500 h-full"
+                onClick={() => setCount(count + 1)}
+              >
+                +
+              </button>
+            </div>
+          ) : (
+            <Button
+              variant="gradient"
+              size={'sm'}
+              color={'green'}
+              className="flex justify-center items-center gap-3"
+              placeholder={undefined}
+              // onClick={() => handleAddToCart(product)}
+            >
+              <RiShoppingBasketFill size={20} />
+              Add to Cart
+            </Button>
+          )}
         </div>
       </div>
     </div>
   )
 }
-
