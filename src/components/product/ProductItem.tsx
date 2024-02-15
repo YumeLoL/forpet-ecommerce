@@ -7,6 +7,9 @@ import { Product } from '@/types'
 import { Button } from '@material-tailwind/react'
 import UnitButton from '../ui/UnitButton'
 import { RiShoppingBasketFill } from 'react-icons/ri'
+import { useDispatch, useSelector } from 'react-redux'
+import { addToCart, addToWishList, removeFromWishList } from '@/redux/slices'
+import { SelectorStateProps } from '@/redux/types'
 
 const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent`
 
@@ -43,6 +46,11 @@ type PriceProps = {
 }
 
 export const ProductItem = (product: Product) => {
+  const dispatch = useDispatch()
+  const { productsData } = useSelector(
+    (state: SelectorStateProps | any) => state.combine.cart,
+  )
+
   const { id, name, merchant, prices, rate, images, collection, slug } = product
   const [currentImage, setCurrentImage] = useState(images[0].imageURL)
   const [selectedUnit, setSelectedUnit] = useState<PriceProps>(prices[0])
@@ -50,6 +58,10 @@ export const ProductItem = (product: Product) => {
   const [itemInCart] = useState(false)
 
   const productLink = `/product/${id}/${slug}`
+
+  const handleAddToCart = (product: Product) => {
+    dispatch(addToCart(product))
+  }
 
   return (
     <div className="group rounded-2xl bg-white p-2">
@@ -127,8 +139,7 @@ export const ProductItem = (product: Product) => {
             </div>
           </div>
 
-          {itemInCart ? (
-            <div className="mt-3 relative flex w-full max-w-[24rem]">
+          {/* <div className="mt-3 relative flex w-full max-w-[24rem]">
               <button
                 className="!absolute left-0 top-0 rounded font-medium text-white bg-green-500 w-8 border border-solid border-green-500 h-full"
                 onClick={() => setCount(count - 1)}
@@ -149,20 +160,18 @@ export const ProductItem = (product: Product) => {
               >
                 +
               </button>
-            </div>
-          ) : (
-            <Button
-              variant="gradient"
-              size={'sm'}
-              color={'green'}
-              className="flex justify-center items-center gap-3"
-              placeholder={undefined}
-              // onClick={() => handleAddToCart(product)}
-            >
-              <RiShoppingBasketFill size={20} />
-              Add to Cart
-            </Button>
-          )}
+            </div> */}
+          <Button
+            variant="gradient"
+            size={'sm'}
+            color={'green'}
+            className="flex justify-center items-center gap-3"
+            placeholder={undefined}
+            onClick={() => handleAddToCart(product)}
+          >
+            <RiShoppingBasketFill size={20} />
+            Add to Cart
+          </Button>
         </div>
       </div>
     </div>

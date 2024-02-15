@@ -4,9 +4,18 @@ import { FiHeart } from 'react-icons/fi'
 import { GoPersonFill } from 'react-icons/go'
 import { useSession, signOut } from 'next-auth/react'
 import Image from 'next/image'
+import { useSelector } from 'react-redux'
+import { SelectorStateProps } from '@/redux/types'
 
 export const TopBar = () => {
   const { data: session } = useSession()
+
+  const { favoritesData } = useSelector(
+    (state: SelectorStateProps | any) => state.combine.favorites,
+  )
+  const { productsData } = useSelector(
+    (state: SelectorStateProps | any) => state.combine.cart,
+  )
 
   return (
     <div className="bg-[#414141] text-[10px] text-gray-300 md:text-xs ">
@@ -55,6 +64,7 @@ export const TopBar = () => {
               className="flex items-center transition-colors hover:text-white"
             >
               <RiShoppingBasketFill size={18} />
+              {productsData ? productsData.length : 0}
             </Link>
           </li>
 
@@ -64,6 +74,7 @@ export const TopBar = () => {
               className="flex items-center transition-colors hover:text-white"
             >
               <FiHeart size={18} />
+              {favoritesData ? favoritesData.length : 0}
             </Link>
           </li>
         </ul>
