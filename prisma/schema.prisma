@@ -108,6 +108,21 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  addresses     Address[]
+}
+
+model Address {
+  id        Int      @id @default(autoincrement())
+  address   String
+  city      String
+  state     String
+  country   String
+  zipCode   String
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
 }
 
 model VerificationToken {
