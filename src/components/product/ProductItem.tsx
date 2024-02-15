@@ -8,7 +8,7 @@ import { Button } from '@material-tailwind/react'
 import UnitButton from '../ui/UnitButton'
 import { RiShoppingBasketFill } from 'react-icons/ri'
 import { useDispatch, useSelector } from 'react-redux'
-import { addToCart, addToWishList, removeFromWishList } from '@/redux/slices'
+import { addToCart, increaseCount } from '@/redux/slices'
 import { SelectorStateProps } from '@/redux/types'
 
 const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent`
@@ -50,17 +50,22 @@ export const ProductItem = (product: Product) => {
   const { productsData } = useSelector(
     (state: SelectorStateProps | any) => state.combine.cart,
   )
+  // const itemInCart = productsData.find(
+  //   (item: Product) => item.id === product.id,
+  // )
 
   const { id, name, merchant, prices, rate, images, collection, slug } = product
   const [currentImage, setCurrentImage] = useState(images[0].imageURL)
   const [selectedUnit, setSelectedUnit] = useState<PriceProps>(prices[0])
   const [count, setCount] = useState(1)
-  const [itemInCart] = useState(false)
 
   const productLink = `/product/${id}/${slug}`
 
   const handleAddToCart = (product: Product) => {
     dispatch(addToCart(product))
+  }
+  const handleIncreaseCount = () => {
+    dispatch(increaseCount(product))
   }
 
   return (
@@ -147,9 +152,7 @@ export const ProductItem = (product: Product) => {
                 -
               </button>
               <p
-                onChange={(e) => {
-                  console.log(e)
-                }}
+                onChange={(e) => handleIncreaseCount()}
                 className="flex h-8 w-full justify-center items-center text-center rounded-md border border-solid border-gray-300 bg-neutral-500 p-2.5 text-gray-900 placeholder-gray-500 outline-none focus:border-gray-300"
               >
                 {count}
@@ -161,6 +164,7 @@ export const ProductItem = (product: Product) => {
                 +
               </button>
             </div> */}
+
           <Button
             variant="gradient"
             size={'sm'}

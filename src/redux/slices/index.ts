@@ -1,5 +1,6 @@
 import {
   addToCart,
+  itemInCart,
   removeFromCart,
   increaseCount,
   decreaseCount,
@@ -18,6 +19,7 @@ import { login, logout } from './handleUser'
 
 export {
   addToCart,
+  itemInCart,
   removeFromCart,
   increaseCount,
   decreaseCount,
