@@ -144,7 +144,7 @@ export const ProductItem = (product: Product) => {
             </div>
           </div>
 
-          {count > 0 ? (
+          {itemInCart?.quantity > 0 ? (
             <div className="h-9 relative flex w-full max-w-[24rem]">
               <button
                 className="!absolute left-0 top-0 rounded-lg font-medium text-white bg-green-500 w-9 border border-solid border-green-500 h-full"
@@ -189,7 +189,10 @@ export const ProductItem = (product: Product) => {
                   image: product.images[0].imageURL,
                   type: product.collection.name,
                   price: selectedUnit.price,
-                  size: `${selectedUnit.quantity}x${selectedUnit.unit}`,
+                  size: {
+                    id: selectedUnit.id,
+                    size: `${selectedUnit.quantity}x${selectedUnit.unit}`,
+                  },
                   quantity: 1,
                   brand: product.merchant?.brandName as string,
                   category: product.collection.name,
