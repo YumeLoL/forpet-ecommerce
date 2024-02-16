@@ -18,6 +18,8 @@ function CartDrawer() {
     (state: SelectorStateProps | any) => state.combine.cart,
   )
 
+  console.log('cart items', productsData)
+
   openRight
     ? (document.body.style.overflowY = 'hidden')
     : (document.body.style.overflowY = 'auto')
@@ -122,9 +124,9 @@ function CartDrawer() {
             })}
           </div>
         ) : (
-          <div className="empty-cart">
-            <RiShoppingBasketFill />
-            <p>Your shopping cart is empty</p>
+          <div className="text-gray-500 flex flex-col items-center">
+            <RiShoppingBasketFill size={60} />
+            <p className="text-lg">Your shopping cart is empty</p>
           </div>
         )}
 

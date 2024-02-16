@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux'
 import { SelectorStateProps } from '@/redux/types'
 import CartDrawer from './CartDrawer'
 import { Menu, MenuHandler, MenuList, MenuItem } from '@material-tailwind/react'
-import { useEffect, useState } from 'react'
 
 export const TopBar = () => {
   const { data: session } = useSession()
@@ -17,8 +16,6 @@ export const TopBar = () => {
   const { productsData } = useSelector(
     (state: SelectorStateProps | any) => state.combine.cart,
   )
-
-  console.log(productsData)
 
   return (
     <div className=" bg-[#414141] text-[10px] text-gray-300 md:text-xs ">

@@ -8,7 +8,12 @@ import { Button } from '@material-tailwind/react'
 import UnitButton from '../ui/UnitButton'
 import { RiShoppingBasketFill } from 'react-icons/ri'
 import { useDispatch, useSelector } from 'react-redux'
-import { addToCart, increaseCount } from '@/redux/slices'
+import {
+  addToCart,
+  decreaseCount,
+  increaseCount,
+  removeFromCart,
+} from '@/redux/slices'
 import { SelectorStateProps, ProductProps } from '@/redux/types'
 
 const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent`
@@ -50,23 +55,17 @@ export const ProductItem = (product: Product) => {
   const { productsData } = useSelector(
     (state: SelectorStateProps | any) => state.combine.cart,
   )
-  // const itemInCart = productsData.find(
-  //   (item: Product) => item.id === product.id,
-  // )
+  const itemInCart = productsData.find(
+    (item: ProductProps) => item.id === product.id,
+  )
 
   const { id, name, merchant, prices, rate, images, collection, slug } = product
   const [currentImage, setCurrentImage] = useState(images[0].imageURL)
   const [selectedUnit, setSelectedUnit] = useState<PriceProps>(prices[0])
-  const [count, setCount] = useState(1)
+  const [count, setCount] = useState(itemInCart ? itemInCart.quantity : 0)
+  // count === 0 && dispatch(removeFromCart(product.id))
 
   const productLink = `/product/${id}/${slug}`
-
-  const handleAddToCart = (shoppedProduct: ProductProps) => {
-    dispatch(addToCart(shoppedProduct))
-  }
-  const handleIncreaseCount = () => {
-    dispatch(increaseCount(product))
-  }
 
   return (
     <div className="group rounded-2xl bg-white p-2">
@@ -144,53 +143,64 @@ export const ProductItem = (product: Product) => {
             </div>
           </div>
 
-          {/* <div className="mt-3 relative flex w-full max-w-[24rem]">
+          {count > 0 ? (
+            <div className="h-9 relative flex w-full max-w-[24rem]">
               <button
-                className="!absolute left-0 top-0 rounded font-medium text-white bg-green-500 w-8 border border-solid border-green-500 h-full"
-                onClick={() => setCount(count - 1)}
+                className="!absolute left-0 top-0 rounded-lg font-medium text-white bg-green-500 w-9 border border-solid border-green-500 h-full"
+                onClick={() => {
+                  if (count > 1) {
+                    dispatch(decreaseCount(product.id))
+                    setCount(count - 1)
+                  } else {
+                    dispatch(removeFromCart(product.id))
+                    setCount(0)
+                  }
+                }}
               >
                 -
               </button>
-              <p
-                onChange={(e) => handleIncreaseCount()}
-                className="flex h-8 w-full justify-center items-center text-center rounded-md border border-solid border-gray-300 bg-neutral-500 p-2.5 text-gray-900 placeholder-gray-500 outline-none focus:border-gray-300"
-              >
+              <p className="flex h-9 w-full justify-center items-center text-center rounded-md border border-solid border-gray-300 bg-neutral-500 p-2.5 text-gray-900 placeholder-gray-500 outline-none focus:border-gray-300">
                 {count}
               </p>
               <button
-                className="!absolute right-0 top-0 rounded font-medium text-white bg-green-500 w-8 border border-solid border-green-500 h-full"
-                onClick={() => setCount(count + 1)}
+                className="!absolute right-0 top-0 rounded-lg font-medium text-white bg-green-500 w-9 border border-solid border-green-500 h-full"
+                onClick={() => {
+                  dispatch(increaseCount(product))
+                  setCount(count + 1)
+                }}
               >
                 +
               </button>
-            </div> */}
-
-          <Button
-            variant="gradient"
-            size={'sm'}
-            color={'green'}
-            className="flex justify-center items-center gap-3"
-            placeholder={undefined}
-            onClick={() => {
-              const shoppedProduct = {
-                id: product.id,
-                name: product.name,
-                slug: product.slug,
-                description: product.description,
-                image: product.images[0].imageURL,
-                type: product.collection.name,
-                price: selectedUnit.price,
-                size: `${selectedUnit.unit}x${selectedUnit.quantity}`,
-                quantity: count,
-                brand: product.merchant?.brandName as string,
-                category: product.collection.name,
-              }
-              handleAddToCart(shoppedProduct)
-            }}
-          >
-            <RiShoppingBasketFill size={20} />
-            Add to Cart
-          </Button>
+            </div>
+          ) : (
+            <Button
+              variant="gradient"
+              size={'sm'}
+              color={'green'}
+              className="flex justify-center items-center gap-3"
+              placeholder={undefined}
+              onClick={() => {
+                const shoppedProduct = {
+                  id: product.id,
+                  name: product.name,
+                  slug: product.slug,
+                  description: product.description,
+                  image: product.images[0].imageURL,
+                  type: product.collection.name,
+                  price: selectedUnit.price,
+                  size: `${selectedUnit.quantity}x${selectedUnit.unit}`,
+                  quantity: 1,
+                  brand: product.merchant?.brandName as string,
+                  category: product.collection.name,
+                }
+                dispatch(addToCart(shoppedProduct))
+                setCount(1)
+              }}
+            >
+              <RiShoppingBasketFill size={20} />
+              Add to Cart
+            </Button>
+          )}
         </div>
       </div>
     </div>

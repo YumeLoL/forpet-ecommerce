@@ -34,13 +34,14 @@ export const cartSlice = createSlice({
       const existingProduct = state.productsData.find(
         (productData: ProductProps) => productData?.id === action.payload.id,
       )
+      console.log('redux', existingProduct)
       if (existingProduct) {
         existingProduct.quantity++
       }
     },
     decreaseCount: (state: any, action) => {
       const existingProduct = state.productsData.find(
-        (productData: ProductProps) => productData?.id === action.payload,
+        (productData: ProductProps) => productData?.id === action.payload.id,
       )
       if (existingProduct && existingProduct.quantity > 1) {
         existingProduct.quantity--
