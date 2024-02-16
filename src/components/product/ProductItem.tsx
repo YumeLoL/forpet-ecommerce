@@ -9,7 +9,7 @@ import UnitButton from '../ui/UnitButton'
 import { RiShoppingBasketFill } from 'react-icons/ri'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart, increaseCount } from '@/redux/slices'
-import { SelectorStateProps } from '@/redux/types'
+import { SelectorStateProps, ProductProps } from '@/redux/types'
 
 const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent`
 
@@ -61,8 +61,8 @@ export const ProductItem = (product: Product) => {
 
   const productLink = `/product/${id}/${slug}`
 
-  const handleAddToCart = (product: Product) => {
-    dispatch(addToCart(product))
+  const handleAddToCart = (shoppedProduct: ProductProps) => {
+    dispatch(addToCart(shoppedProduct))
   }
   const handleIncreaseCount = () => {
     dispatch(increaseCount(product))
@@ -171,7 +171,22 @@ export const ProductItem = (product: Product) => {
             color={'green'}
             className="flex justify-center items-center gap-3"
             placeholder={undefined}
-            onClick={() => handleAddToCart(product)}
+            onClick={() => {
+              const shoppedProduct = {
+                id: product.id,
+                name: product.name,
+                slug: product.slug,
+                description: product.description,
+                image: product.images[0].imageURL,
+                type: product.collection.name,
+                price: selectedUnit.price,
+                size: `${selectedUnit.unit}x${selectedUnit.quantity}`,
+                quantity: count,
+                brand: product.merchant?.brandName as string,
+                category: product.collection.name,
+              }
+              handleAddToCart(shoppedProduct)
+            }}
           >
             <RiShoppingBasketFill size={20} />
             Add to Cart

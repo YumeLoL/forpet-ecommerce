@@ -22,7 +22,8 @@ export interface ProductProps {
   image: string
   type: string
   price: number
-  quantity: number
+  size: string
+  quantity: number // amount
   brand: string
   category: string
 }

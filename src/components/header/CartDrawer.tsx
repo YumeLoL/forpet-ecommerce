@@ -1,22 +1,30 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Drawer,
   Button,
   Typography,
   IconButton,
 } from '@material-tailwind/react'
-import { RiShoppingBasketFill } from 'react-icons/ri'
-import { useSelector } from 'react-redux'
-import { SelectorStateProps } from '@/redux/types'
+import { RiShoppingBasketFill, RiDeleteBinLine } from 'react-icons/ri'
+import { useDispatch, useSelector } from 'react-redux'
+import { ProductProps, SelectorStateProps } from '@/redux/types'
+import Image from 'next/image'
+import { removeFromCart } from '@/redux/slices'
 
 function CartDrawer() {
+  const dispatch = useDispatch()
+  const [openRight, setOpenRight] = useState(false)
   const { productsData } = useSelector(
     (state: SelectorStateProps | any) => state.combine.cart,
   )
-  const [openRight, setOpenRight] = React.useState(false)
+
+  openRight
+    ? (document.body.style.overflowY = 'hidden')
+    : (document.body.style.overflowY = 'auto')
 
   const openDrawerRight = () => setOpenRight(true)
   const closeDrawerRight = () => setOpenRight(false)
+
   return (
     <div>
       <button
@@ -31,12 +39,14 @@ function CartDrawer() {
         placement="right"
         open={openRight}
         onClose={closeDrawerRight}
-        className="p-4"
+        className="p-4 h-screen "
         placeholder={undefined}
+        overlay={false}
+        style={{ overflowY: 'hidden' }}
       >
         <div className="mb-6 flex items-center justify-between">
           <Typography variant="h5" color="blue-gray" placeholder={undefined}>
-            Material Tailwind
+            Shopping Cart
           </Typography>
           <IconButton
             variant="text"
@@ -60,18 +70,95 @@ function CartDrawer() {
             </svg>
           </IconButton>
         </div>
-        <p color="gray" className="mb-8 pr-4 font-normal">
-          Material Tailwind features multiple React and HTML components, all
-          written with Tailwind CSS classes and Material Design guidelines.
-        </p>
-        <div className="flex gap-2">
-          <Button size="sm" variant="outlined" placeholder={undefined}>
-            Documentation
-          </Button>
-          <Button size="sm" placeholder={undefined}>
-            Get Started
-          </Button>
-        </div>
+
+        {productsData.length > 0 ? (
+          <div className="flex flex-col px-4 h-[80vh] overflow-auto">
+            {productsData.map((product: ProductProps) => {
+              return (
+                <div
+                  key={product.id}
+                  className={'flex flex-col text-black gap-3'}
+                >
+                  <div className="flex w-full justify-between">
+                    <div>
+                      <Image
+                        src={`${
+                          product.image
+                            ? product.image
+                            : '/images/placeholder-image.png'
+                        }`}
+                        alt={`${product.name} image`}
+                        className={'object-cover'}
+                        width={80}
+                        height={80}
+                      />
+                      <h2 className="text-sm">{product.name}</h2>
+                    </div>
+
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => {
+                        console.log(product)
+                        dispatch(removeFromCart(product.id))
+                      }}
+                    >
+                      <RiDeleteBinLine size={16} color={'gray'} />
+                    </div>
+                  </div>
+
+                  <div className="flex w-full justify-between">
+                    <p className="">{product.size}</p>
+                    <div className="flex gap-4">
+                      <p className="text-gray-500">
+                        qty:
+                        <span className="text-black">{product.quantity}</span>
+                      </p>
+                      <p className="">{`$${product.price}`}</p>
+                    </div>
+                  </div>
+                  <hr className="my-3" />
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          <div className="empty-cart">
+            <RiShoppingBasketFill />
+            <p>Your shopping cart is empty</p>
+          </div>
+        )}
+
+        {productsData.length > 0 && (
+          <div className="fixed bottom-6">
+            <div className="text-black flex justify-between">
+              <p className="">Total</p>
+              <div className="flex gap-4">
+                <p>items: {productsData.length}</p>
+                <p className="">
+                  $
+                  {productsData.reduce(
+                    (a: number, b: ProductProps) => a + b.price,
+                    0,
+                  )}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-2 mt-2">
+              <Button
+                onClick={closeDrawerRight}
+                size="sm"
+                variant="outlined"
+                placeholder={undefined}
+              >
+                Keep Shopping
+              </Button>
+              <Button size="sm" placeholder={undefined}>
+                Place Order
+              </Button>
+            </div>
+          </div>
+        )}
       </Drawer>
     </div>
   )

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { SelectorStateProps } from '@/redux/types'
 import CartDrawer from './CartDrawer'
 import { Menu, MenuHandler, MenuList, MenuItem } from '@material-tailwind/react'
+import { useEffect, useState } from 'react'
 
 export const TopBar = () => {
   const { data: session } = useSession()
@@ -20,7 +21,7 @@ export const TopBar = () => {
   console.log(productsData)
 
   return (
-    <div className="bg-[#414141] text-[10px] text-gray-300 md:text-xs ">
+    <div className=" bg-[#414141] text-[10px] text-gray-300 md:text-xs ">
       <div className="mx-auto flex flex-col items-center px-4 py-1 md:flex-row md:py-1.5 max-w-7xl">
         <p className="pb-2 md:pb-0">Get 25% discount on a first purchase.</p>
 
