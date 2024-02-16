@@ -73,8 +73,10 @@ function CartDrawer() {
           </IconButton>
         </div>
 
-        {productsData.length > 0 ? (
+        {productsData.length ? (
           <div className="flex flex-col px-4 h-[80vh] overflow-auto">
+            <div className={'text-black'}>{productsData.length}</div>
+
             {productsData.map((product: ProductProps) => {
               return (
                 <div
@@ -100,8 +102,8 @@ function CartDrawer() {
                     <div
                       className="cursor-pointer"
                       onClick={() => {
-                        console.log(product)
-                        dispatch(removeFromCart(product.id))
+                        console.log('remove from cart---', product)
+                        dispatch(removeFromCart(product))
                       }}
                     >
                       <RiDeleteBinLine size={16} color={'gray'} />
@@ -131,6 +133,8 @@ function CartDrawer() {
           </div>
         ) : (
           <div className="text-gray-500 flex flex-col items-center">
+            <div className={'text-black'}>{productsData.length}</div>
+
             <RiShoppingBasketFill size={60} />
             <p className="text-lg">Your shopping cart is empty</p>
           </div>

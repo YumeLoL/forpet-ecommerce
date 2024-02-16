@@ -56,16 +56,34 @@ export const ProductItem = (product: Product) => {
   const { productsData } = useSelector(
     (state: SelectorStateProps | any) => state.combine.cart,
   )
-  const itemInCart = productsData.find(
-    (item: ProductProps) => item.id === product.id,
-  )
 
   const { id, name, merchant, prices, rate, images, collection, slug } = product
   const [currentImage, setCurrentImage] = useState(images[0].imageURL)
   const [selectedUnit, setSelectedUnit] = useState<PriceProps>(prices[0])
-  const [count, setCount] = useState(itemInCart ? itemInCart.quantity : 0)
 
   const productLink = `/product/${id}/${slug}`
+
+  const currentProduct = {
+    id: product.id,
+    name: product.name,
+    slug: product.slug,
+    description: product.description,
+    image: product.images[0].imageURL,
+    type: product.collection.name,
+    price: selectedUnit.price,
+    size: {
+      id: selectedUnit.id,
+      size: `${selectedUnit.quantity}x${selectedUnit.unit}`,
+    },
+    quantity: 1,
+    brand: product.merchant?.brandName as string,
+    category: product.collection.name,
+  }
+
+  const addedProduct = productsData.find(
+    (productData: ProductProps) =>
+      productData?.size.id === currentProduct.size.id,
+  )
 
   return (
     <div className="group rounded-2xl bg-white p-2">
@@ -118,18 +136,17 @@ export const ProductItem = (product: Product) => {
         </div>
         <div className="flex flex-col items-left justify-between gap-2">
           <div className="flex flex-wrap gap-1">
-            {prices.map((price, index) => {
+            {prices.map((price) => {
               return (
-                <div key={index}>
-                  <UnitButton
-                    id={price.id}
-                    quantity={price.quantity}
-                    unit={price.unit}
-                    price={price.price}
-                    setSelectedUnit={setSelectedUnit}
-                    selectedUnit={selectedUnit}
-                  />
-                </div>
+                <UnitButton
+                  key={price.id}
+                  id={price.id}
+                  quantity={price.quantity}
+                  unit={price.unit}
+                  price={price.price}
+                  setSelectedUnit={setSelectedUnit}
+                  selectedUnit={selectedUnit}
+                />
               )
             })}
           </div>
@@ -144,36 +161,34 @@ export const ProductItem = (product: Product) => {
             </div>
           </div>
 
-          {itemInCart?.quantity > 0 ? (
-            <div className="h-9 relative flex w-full max-w-[24rem]">
-              <button
-                className="!absolute left-0 top-0 rounded-lg font-medium text-white bg-green-500 w-9 border border-solid border-green-500 h-full"
-                onClick={() => {
-                  if (count > 1) {
-                    dispatch(decreaseCount(product))
-                    setCount(count - 1)
-                  } else {
-                    dispatch(removeFromCart(product.id))
-                    setCount(0)
-                  }
-                }}
-              >
-                -
-              </button>
-              <p className="flex h-9 w-full justify-center items-center text-center rounded-md border border-solid border-gray-300 bg-neutral-500 p-2.5 text-gray-900 placeholder-gray-500 outline-none focus:border-gray-300">
-                {count}
-              </p>
-              <button
-                className="!absolute right-0 top-0 rounded-lg font-medium text-white bg-green-500 w-9 border border-solid border-green-500 h-full"
-                onClick={() => {
-                  dispatch(increaseCount(product))
-                  setCount(count + 1)
-                }}
-              >
-                +
-              </button>
-            </div>
-          ) : (
+          {addedProduct?.quantity > 0 &&
+            addedProduct.size.id === selectedUnit.id && (
+              <div className="h-9 relative flex w-full max-w-[24rem]">
+                <button
+                  className="!absolute left-0 top-0 rounded-lg font-medium text-white bg-green-500 w-9 border border-solid border-green-500 h-full"
+                  onClick={() => {
+                    addedProduct.quantity > 1
+                      ? dispatch(decreaseCount(currentProduct))
+                      : dispatch(removeFromCart(currentProduct))
+                  }}
+                >
+                  -
+                </button>
+                <p className="flex h-9 w-full justify-center items-center text-center rounded-md border border-solid border-gray-300 bg-neutral-500 p-2.5 text-gray-900 placeholder-gray-500 outline-none focus:border-gray-300">
+                  {addedProduct.quantity ? addedProduct.quantity : 0}
+                </p>
+                <button
+                  className="!absolute right-0 top-0 rounded-lg font-medium text-white bg-green-500 w-9 border border-solid border-green-500 h-full"
+                  onClick={() => {
+                    dispatch(increaseCount(currentProduct))
+                  }}
+                >
+                  +
+                </button>
+              </div>
+            )}
+
+          {!addedProduct && currentProduct.size.id === selectedUnit.id && (
             <Button
               variant="gradient"
               size={'sm'}
@@ -181,24 +196,7 @@ export const ProductItem = (product: Product) => {
               className="flex justify-center items-center gap-3"
               placeholder={undefined}
               onClick={() => {
-                const shoppedProduct = {
-                  id: product.id,
-                  name: product.name,
-                  slug: product.slug,
-                  description: product.description,
-                  image: product.images[0].imageURL,
-                  type: product.collection.name,
-                  price: selectedUnit.price,
-                  size: {
-                    id: selectedUnit.id,
-                    size: `${selectedUnit.quantity}x${selectedUnit.unit}`,
-                  },
-                  quantity: 1,
-                  brand: product.merchant?.brandName as string,
-                  category: product.collection.name,
-                }
-                dispatch(addToCart(shoppedProduct))
-                setCount(1)
+                dispatch(addToCart(currentProduct))
               }}
             >
               <RiShoppingBasketFill size={20} />

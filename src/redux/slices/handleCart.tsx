@@ -10,11 +10,9 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      console.log('state', state)
-      console.log('action', action)
-
       const existingProduct = state.productsData.find(
-        (productData: ProductProps) => productData?.id === action.payload.id,
+        (productData: ProductProps) =>
+          productData?.size.id === action.payload.size.id,
       )
 
       if (existingProduct) {
@@ -25,26 +23,29 @@ export const cartSlice = createSlice({
     },
     removeFromCart: (state, action) => {
       const existingProduct = state.productsData.find(
-        (productData: ProductProps) => productData?.id === action.payload,
+        (productData: ProductProps) =>
+          productData?.size.id === action.payload.size.id,
       )
       if (existingProduct) {
         state.productsData = state.productsData.filter(
-          (productData: ProductProps) => productData.id !== existingProduct.id,
+          (productData: ProductProps) =>
+            productData.size.id !== existingProduct.size.id,
         )
       }
     },
     increaseCount: (state: any, action) => {
       const existingProduct = state.productsData.find(
-        (productData: ProductProps) => productData?.id === action.payload.id,
+        (productData: ProductProps) =>
+          productData?.size.id === action.payload.size.id,
       )
-      console.log('redux', existingProduct)
       if (existingProduct) {
         existingProduct.quantity++
       }
     },
     decreaseCount: (state: any, action) => {
       const existingProduct = state.productsData.find(
-        (productData: ProductProps) => productData?.id === action.payload.id,
+        (productData: ProductProps) =>
+          productData?.size.id === action.payload.size.id,
       )
       if (existingProduct && existingProduct.quantity > 1) {
         existingProduct.quantity--
