@@ -115,8 +115,14 @@ function CartDrawer() {
                         qty:
                         <span className="text-black">{product.quantity}</span>
                       </p>
+                      <p className="text-gray-500">x</p>
                       <p className="">{`$${product.price}`}</p>
                     </div>
+                  </div>
+
+                  <div className="flex w-full justify-between">
+                    <p className="text-gray-500">Subtotal</p>
+                    <p className="">{`$${product.price * product.quantity}`}</p>
                   </div>
                   <hr className="my-3" />
                 </div>
@@ -133,13 +139,13 @@ function CartDrawer() {
         {productsData.length > 0 && (
           <div className="fixed bottom-6">
             <div className="text-black flex justify-between">
-              <p className="">Total</p>
+              <p className="text-sm">Total</p>
               <div className="flex gap-4">
                 <p>items: {productsData.length}</p>
                 <p className="">
                   $
                   {productsData.reduce(
-                    (a: number, b: ProductProps) => a + b.price,
+                    (a: number, b: ProductProps) => a + b.price * b.quantity,
                     0,
                   )}
                 </p>

@@ -149,7 +149,7 @@ export const ProductItem = (product: Product) => {
                 className="!absolute left-0 top-0 rounded-lg font-medium text-white bg-green-500 w-9 border border-solid border-green-500 h-full"
                 onClick={() => {
                   if (count > 1) {
-                    dispatch(decreaseCount(product.id))
+                    dispatch(decreaseCount(product))
                     setCount(count - 1)
                   } else {
                     dispatch(removeFromCart(product.id))
