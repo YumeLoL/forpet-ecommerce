@@ -1,6 +1,7 @@
 import React from 'react'
 
 type Props = {
+  id: number
   quantity: number
   unit: string
   price: number
@@ -9,6 +10,7 @@ type Props = {
 }
 
 function UnitButton({
+  id,
   quantity,
   unit,
   price,
@@ -24,7 +26,7 @@ function UnitButton({
     <div>
       <div
         onClick={() => {
-          setSelectedUnit({ quantity, unit, price })
+          setSelectedUnit({ id, quantity, unit, price })
         }}
         className={`cursor-pointer text-xs font-medium text-gray-900 border border-gray-300 rounded-md px-1 py-0.5 ${isSelected ? 'bg-gray-200' : ''} `}
       >

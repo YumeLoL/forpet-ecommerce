@@ -22,7 +22,10 @@ export interface ProductProps {
   image: string
   type: string
   price: number
-  size: string
+  size: {
+    id: number
+    size: string
+  }
   quantity: number // amount
   brand: string
   category: string

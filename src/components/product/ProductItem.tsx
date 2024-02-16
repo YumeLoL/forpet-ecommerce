@@ -45,6 +45,7 @@ export const Skeleton = () => {
 }
 
 type PriceProps = {
+  id: number
   price: number
   unit: string
   quantity: number
@@ -63,7 +64,6 @@ export const ProductItem = (product: Product) => {
   const [currentImage, setCurrentImage] = useState(images[0].imageURL)
   const [selectedUnit, setSelectedUnit] = useState<PriceProps>(prices[0])
   const [count, setCount] = useState(itemInCart ? itemInCart.quantity : 0)
-  // count === 0 && dispatch(removeFromCart(product.id))
 
   const productLink = `/product/${id}/${slug}`
 
@@ -122,6 +122,7 @@ export const ProductItem = (product: Product) => {
               return (
                 <div key={index}>
                   <UnitButton
+                    id={price.id}
                     quantity={price.quantity}
                     unit={price.unit}
                     price={price.price}

@@ -28,6 +28,7 @@ export const defaultProductSelect = Prisma.validator<Prisma.ProductSelect>()({
   },
   prices: {
     select: {
+      id: true,
       price: true,
       quantity: true,
       unit: true,

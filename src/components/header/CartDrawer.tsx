@@ -109,7 +109,7 @@ function CartDrawer() {
                   </div>
 
                   <div className="flex w-full justify-between">
-                    <p className="">{product.size}</p>
+                    <p className="">{product.size.size}</p>
                     <div className="flex gap-4">
                       <p className="text-gray-500">
                         qty:
