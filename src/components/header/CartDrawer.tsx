@@ -10,8 +10,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ProductProps, SelectorStateProps } from '@/redux/types'
 import Image from 'next/image'
 import { removeFromCart } from '@/redux/slices'
+import { useRouter } from 'next/navigation'
 
 function CartDrawer() {
+  const router = useRouter()
   const dispatch = useDispatch()
   const [openRight, setOpenRight] = useState(false)
   const { productsData } = useSelector(
@@ -39,12 +41,12 @@ function CartDrawer() {
         placement="right"
         open={openRight}
         onClose={closeDrawerRight}
-        className="p-4 h-screen "
+        className="p-4 h-screen w-full flex flex-col justify-between align-middle"
         placeholder={undefined}
         overlay={false}
         style={{ overflowY: 'hidden' }}
       >
-        <div className="mb-6 flex items-center justify-between">
+        <div className="flex items-center justify-between">
           <Typography variant="h5" color="blue-gray" placeholder={undefined}>
             Shopping Cart
           </Typography>
@@ -71,67 +73,69 @@ function CartDrawer() {
           </IconButton>
         </div>
 
-        {productsData.length ? (
-          <div className="flex flex-col px-4 h-[80vh] overflow-y-auto">
-            {productsData.map((product: ProductProps, index: number) => {
-              return (
-                <div key={index} className={'flex flex-col text-black gap-3'}>
-                  <div className="flex w-full justify-between">
-                    <div>
-                      <Image
-                        src={`${
-                          product.image
-                            ? product.image
-                            : '/images/placeholder-image.png'
-                        }`}
-                        alt={`${product.name} image`}
-                        className={'object-cover'}
-                        width={80}
-                        height={80}
-                      />
-                      <h2 className="text-sm">{product.name}</h2>
+        <div className="">
+          {productsData.length ? (
+            <div className="flex flex-col px-4 h-[75vh] overflow-y-auto">
+              {productsData.map((product: ProductProps, index: number) => {
+                return (
+                  <div key={index} className={'flex flex-col text-black gap-3'}>
+                    <div className="flex w-full justify-between">
+                      <div>
+                        <Image
+                          src={`${
+                            product.image
+                              ? product.image
+                              : '/images/placeholder-image.png'
+                          }`}
+                          alt={`${product.name} image`}
+                          className={'object-cover'}
+                          width={80}
+                          height={80}
+                        />
+                        <h2 className="text-sm">{product.name}</h2>
+                      </div>
+
+                      <div
+                        className="cursor-pointer"
+                        onClick={() => {
+                          dispatch(removeFromCart(product))
+                        }}
+                      >
+                        <RiDeleteBinLine size={16} color={'gray'} />
+                      </div>
                     </div>
 
-                    <div
-                      className="cursor-pointer"
-                      onClick={() => {
-                        dispatch(removeFromCart(product))
-                      }}
-                    >
-                      <RiDeleteBinLine size={16} color={'gray'} />
+                    <div className="flex w-full justify-between">
+                      <p className="">{product.size.size}</p>
+                      <div className="flex gap-4">
+                        <p className="text-gray-500">
+                          qty:
+                          <span className="text-black">{product.quantity}</span>
+                        </p>
+                        <p className="text-gray-500">x</p>
+                        <p className="">{`$${product.price}`}</p>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="flex w-full justify-between">
-                    <p className="">{product.size.size}</p>
-                    <div className="flex gap-4">
-                      <p className="text-gray-500">
-                        qty:
-                        <span className="text-black">{product.quantity}</span>
-                      </p>
-                      <p className="text-gray-500">x</p>
-                      <p className="">{`$${product.price}`}</p>
+                    <div className="flex w-full justify-between">
+                      <p className="text-gray-500">Subtotal</p>
+                      <p className="">{`$${product.price * product.quantity}`}</p>
                     </div>
+                    <hr className="my-3" />
                   </div>
+                )
+              })}
+            </div>
+          ) : (
+            <div className="text-gray-500 flex flex-col items-center">
+              <RiShoppingBasketFill size={60} />
+              <p className="text-lg">Your shopping cart is empty</p>
+            </div>
+          )}
+        </div>
 
-                  <div className="flex w-full justify-between">
-                    <p className="text-gray-500">Subtotal</p>
-                    <p className="">{`$${product.price * product.quantity}`}</p>
-                  </div>
-                  <hr className="my-3" />
-                </div>
-              )
-            })}
-          </div>
-        ) : (
-          <div className="text-gray-500 flex flex-col items-center">
-            <RiShoppingBasketFill size={60} />
-            <p className="text-lg">Your shopping cart is empty</p>
-          </div>
-        )}
-
-        {productsData.length > 0 && (
-          <div className="fixed bottom-6">
+        {productsData.length > 0 ? (
+          <div className="">
             <div className="text-black flex justify-between">
               <p className="text-sm">Total</p>
               <div className="flex gap-4">
@@ -155,11 +159,17 @@ function CartDrawer() {
               >
                 Keep Shopping
               </Button>
-              <Button size="sm" placeholder={undefined}>
+              <Button
+                onClick={() => router.push('/my-cart')}
+                size="sm"
+                placeholder={undefined}
+              >
                 Place Order
               </Button>
             </div>
           </div>
+        ) : (
+          <div></div>
         )}
       </Drawer>
     </div>
