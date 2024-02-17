@@ -1,7 +1,7 @@
 import React from 'react'
 
 type Props = {
-  id: number
+  id: string
   quantity: number
   unit: string
   price: number

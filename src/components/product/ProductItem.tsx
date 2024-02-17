@@ -45,7 +45,7 @@ export const Skeleton = () => {
 }
 
 type PriceProps = {
-  id: number
+  id: string
   price: number
   unit: string
   quantity: number

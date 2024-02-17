@@ -15,7 +15,7 @@ export interface ContainerProps {
 }
 
 export interface ProductProps {
-  id: number
+  id: string
   name: string
   description: string
   slug: string
@@ -23,7 +23,7 @@ export interface ProductProps {
   type: string
   price: number
   size: {
-    id: number
+    id: string
     size: string
   }
   quantity: number // amount
