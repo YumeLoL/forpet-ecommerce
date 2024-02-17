@@ -115,7 +115,7 @@ export const productRouter = createTRPCRouter({
   one: publicProcedure
     .input(
       z.object({
-        id: z.number(),
+        id: z.string(),
       }),
     )
     .query(async ({ input, ctx }) => {
