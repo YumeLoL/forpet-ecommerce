@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Drawer,
   Button,
@@ -17,8 +17,6 @@ function CartDrawer() {
   const { productsData } = useSelector(
     (state: SelectorStateProps | any) => state.combine.cart,
   )
-
-  console.log('cart items', productsData)
 
   openRight
     ? (document.body.style.overflowY = 'hidden')
@@ -74,15 +72,10 @@ function CartDrawer() {
         </div>
 
         {productsData.length ? (
-          <div className="flex flex-col px-4 h-[80vh] overflow-auto">
-            <div className={'text-black'}>{productsData.length}</div>
-
-            {productsData.map((product: ProductProps) => {
+          <div className="flex flex-col px-4 h-[80vh] overflow-y-auto">
+            {productsData.map((product: ProductProps, index: number) => {
               return (
-                <div
-                  key={product.id}
-                  className={'flex flex-col text-black gap-3'}
-                >
+                <div key={index} className={'flex flex-col text-black gap-3'}>
                   <div className="flex w-full justify-between">
                     <div>
                       <Image
@@ -102,7 +95,6 @@ function CartDrawer() {
                     <div
                       className="cursor-pointer"
                       onClick={() => {
-                        console.log('remove from cart---', product)
                         dispatch(removeFromCart(product))
                       }}
                     >
@@ -133,8 +125,6 @@ function CartDrawer() {
           </div>
         ) : (
           <div className="text-gray-500 flex flex-col items-center">
-            <div className={'text-black'}>{productsData.length}</div>
-
             <RiShoppingBasketFill size={60} />
             <p className="text-lg">Your shopping cart is empty</p>
           </div>

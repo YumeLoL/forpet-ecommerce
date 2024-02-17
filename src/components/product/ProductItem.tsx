@@ -167,9 +167,7 @@ export const ProductItem = (product: Product) => {
                 <button
                   className="!absolute left-0 top-0 rounded-lg font-medium text-white bg-green-500 w-9 border border-solid border-green-500 h-full"
                   onClick={() => {
-                    addedProduct.quantity > 1
-                      ? dispatch(decreaseCount(currentProduct))
-                      : dispatch(removeFromCart(currentProduct))
+                    dispatch(decreaseCount(currentProduct))
                   }}
                 >
                   -

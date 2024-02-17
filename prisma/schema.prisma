@@ -37,7 +37,7 @@ model Merchant {
 }
 
 model Product {
-  id           Int              @id @default(autoincrement())
+  id           String           @id @default(cuid())
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
   name         String           @db.VarChar(255)
@@ -55,20 +55,20 @@ model Product {
 }
 
 model ProductImage {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   imageURL  String
   imageBlur String
   Product   Product? @relation(fields: [productId], references: [id])
-  productId Int?
+  productId String?
 }
 
 model ProductPrice {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(cuid())
   price     Float
   quantity  Float
   unit      String
   Product   Product @relation(fields: [productId], references: [id])
-  productId Int
+  productId String
 }
 
 model Account {
@@ -112,7 +112,7 @@ model User {
 }
 
 model Address {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   address   String
   city      String
   state     String
