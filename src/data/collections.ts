@@ -6,7 +6,7 @@ export const collections: Prisma.CollectionCreateManyInput[] = [
     id: 2,
     name: 'Litter and Accessories',
     slug: 'litter-and-accessories',
-    types: ['CAT', 'OTHER'],
+    types: ['CAT', 'DOG', 'OTHER'],
   },
   {
     id: 3,

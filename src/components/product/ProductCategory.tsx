@@ -2,15 +2,19 @@ import { useRouter } from 'next/router'
 import { Accordion } from '@/components/ui'
 import { useQuery } from '@/hooks'
 import { api } from '@/utils/api'
+import { CollectionType } from '@prisma/client'
 
 export const ProductCategory = () => {
   const router = useRouter()
   const { addQuery, removeQuery } = useQuery({ shallow: true, scroll: true })
   const { slug, cate: slectedCate = '' } = router.query
 
+  console.log('route query', router.query)
+
   if (!slug) return null
 
   const { data: categories } = api.collection.getAllBySlug.useQuery({
+    type: slug[0].toUpperCase() as CollectionType,
     slug: slug[1],
   })
 
