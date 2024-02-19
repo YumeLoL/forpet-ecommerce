@@ -14,12 +14,11 @@ export const ProductsList = ({ products, isLoading }: Props) => {
           .fill('')
           .map((_, index) => <Skeleton key={index} />)}
       {products &&
-        products.map((product) => (
-          <div key={product.id}>
+        products.map((product, index) => (
+          <div key={index}>
             <ProductItem {...product} />
           </div>
         ))}
     </div>
   )
 }
-

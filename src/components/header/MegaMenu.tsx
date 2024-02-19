@@ -101,6 +101,7 @@ export const MegaMenu = ({
                   <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
                     {collection.name}
                   </p>
+
                   <ul className="pt-2">
                     {collection.children
                       .filter((subCollection) =>

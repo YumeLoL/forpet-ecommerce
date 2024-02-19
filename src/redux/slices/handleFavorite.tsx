@@ -11,7 +11,7 @@ export const favoriteSlice = createSlice({
   reducers: {
     addToWishList: (state, action) => {
       const existingProduct = state.favoritesData.find(
-        (productData: ProductProps) => productData?._id === action.payload._id,
+        (productData: ProductProps) => productData?.id === action.payload.id,
       )
       if (existingProduct) {
         existingProduct.quantity += action.payload.quantity
@@ -23,12 +23,11 @@ export const favoriteSlice = createSlice({
     },
     removeFromWishList: (state, action) => {
       const existingProduct = state.favoritesData.find(
-        (productData: ProductProps) => productData?._id === action.payload,
+        (productData: ProductProps) => productData?.id === action.payload,
       )
       if (existingProduct) {
         state.favoritesData = state.favoritesData.filter(
-          (productData: ProductProps) =>
-            productData._id !== existingProduct._id,
+          (productData: ProductProps) => productData.id !== existingProduct.id,
         )
       }
       localStorage.setItem('favorites', JSON.stringify(state.favoritesData))

@@ -10,41 +10,39 @@ export const cartSlice = createSlice({
   initialState,
   reducers: {
     addToCart: (state, action) => {
-      const existingProduct = state.productsData.find(
-        (productData: ProductProps) => productData?._id === action.payload._id,
-      )
-
-      if (existingProduct) {
-        existingProduct.quantity += action.payload.quantity
-      } else {
-        state.productsData.push(action.payload)
-      }
+      state.productsData.push(action.payload)
     },
     removeFromCart: (state, action) => {
-      const existingProduct = state.productsData.find(
-        (productData: ProductProps) => productData?._id === action.payload,
+      state.productsData = state.productsData.filter(
+        (productData: ProductProps) =>
+          productData?.size.id !== action.payload.size.id,
       )
-      if (existingProduct) {
-        state.productsData = state.productsData.filter(
-          (productData: ProductProps) =>
-            productData._id !== existingProduct._id,
-        )
-      }
     },
     increaseCount: (state: any, action) => {
-      const existingProduct = state.productsData.find(
-        (productData: ProductProps) => productData?._id === action.payload._id,
+      const { productsData } = state
+      const existingProduct = productsData.find(
+        (productData: ProductProps) =>
+          productData?.size.id === action.payload.size.id,
       )
+
       if (existingProduct) {
         existingProduct.quantity++
       }
     },
     decreaseCount: (state: any, action) => {
-      const existingProduct = state.productsData.find(
-        (productData: ProductProps) => productData?._id === action.payload,
+      const { productsData } = state
+      const existingProduct = productsData.find(
+        (productData: ProductProps) =>
+          productData?.size.id === action.payload.size.id,
       )
+
       if (existingProduct && existingProduct.quantity > 1) {
         existingProduct.quantity--
+      } else if (existingProduct && existingProduct.quantity === 1) {
+        state.productsData = state.productsData.filter(
+          (productData: ProductProps) =>
+            productData?.size.id !== action.payload.size.id,
+        )
       }
     },
     clearCart: (state) => {

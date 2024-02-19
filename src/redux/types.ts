@@ -15,16 +15,20 @@ export interface ContainerProps {
 }
 
 export interface ProductProps {
-  _id: number
-  title: string
+  id: string
+  name: string
   description: string
+  slug: string
   image: string
+  type: string
   price: number
-  previousPrice: number
-  isNew: boolean
+  size: {
+    id: string
+    size: string
+  }
+  quantity: number // amount
   brand: string
   category: string
-  quantity: number
 }
 
 export interface ProductsProps {
