@@ -3,12 +3,18 @@ import { useSession } from 'next-auth/react'
 import { useState, useEffect, ReactElement } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
-import { Minus, Plus, X } from 'lucide-react'
+import { Minus, Plus, Trash2, X } from 'lucide-react'
 // import { loadStripe } from '@stripe/stripe-js'
 import { SelectorStateProps, ProductProps } from '@/redux/types'
 import Link from 'next/link'
 import type { NextPageWithLayout } from '../_app'
 import { PrimaryLayout } from '@/layouts'
+import {
+  clearCart,
+  decreaseCount,
+  increaseCount,
+  removeFromCart,
+} from '@/redux/slices'
 
 // const promisePayment = loadStripe(
 //   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
@@ -27,20 +33,6 @@ const MyCart: NextPageWithLayout = () => {
   const { data: session } = useSession()
 
   console.log(session)
-
-  useEffect(() => {
-    //   let amt = 0;
-    //   let rowAmt = 0;
-    //   productsData.map((item: ProductProps) => {
-    //     amt += item.price * item.quantity;
-    //     return;
-    //   });
-    //   productsData.map((item: ProductProps) => {
-    //     rowAmt += item?.previousPrice * item?.quantity;
-    //   });
-    //   setTotalAmt(amt);
-    //   setRowPrice(rowAmt);
-  }, [])
 
   return (
     <div className=" p-4 lg:p-6">
@@ -63,9 +55,7 @@ const MyCart: NextPageWithLayout = () => {
                     <th scope="col" className="px-6 py-3">
                       SubTotal
                     </th>
-                    <th scope="col" className="px-6 py-3">
-                      Saving
-                    </th>
+                    <th scope="col" className="px-6 py-3"></th>
                   </tr>
                 </thead>
                 {productsData.map((item: ProductProps) => {
@@ -76,15 +66,6 @@ const MyCart: NextPageWithLayout = () => {
                           scope="row"
                           className="px-6 py-4 flex items-center gap-3"
                         >
-                          <X
-                            // onClick={() => {
-                            //   dispatch(removeFromCart(item?._id)),
-                            //     toast.success(
-                            //       `${item.title} is removed from Wishlist!`,
-                            //     )
-                            // }}
-                            className="w-4 h-4 hover:text-red-600 cursor-pointer duration-200"
-                          />
                           <Image
                             src={item?.image}
                             alt="proudct image"
@@ -97,29 +78,24 @@ const MyCart: NextPageWithLayout = () => {
                           </p>
                         </th>
                         <td className="px-6 py-4">{item?.price}</td>
-                        <td className="px-6 py-4 flex items-center gap-4">
+                        <td className="px-6 py-4">
                           <span className="border border-zinc-300 p-1 rounded-md hover:border-zinc-800 cursor-pointer duration-200 inline-flex items-center justify-center">
                             <Minus
-                              // onClick={() =>
-                              //   item?.quantity > 1
-                              //     ? dispatch(decreaseCount(item._id)) &&
-                              //       toast.success(
-                              //         'Quantity decreased Successfully!',
-                              //       )
-                              //     : toast.error('Can not delete less than 1')
-                              // }
+                              onClick={() =>
+                                item?.quantity > 1 &&
+                                dispatch(decreaseCount(item))
+                              }
                               className="w-4 h-4"
                             />
                           </span>
-                          <span className="font-semibold">
+                          <span className="font-semibold mx-4">
                             {item?.quantity}
                           </span>
                           <span className="border border-zinc-300 p-1 rounded-md hover:border-zinc-800 cursor-pointer duration-200 inline-flex items-center justify-center">
                             <Plus
-                              // onClick={() => {
-                              //   dispatch(increaseCount(item)),
-                              //     toast.success(`${item?.title} quantity added`)
-                              // }}
+                              onClick={() => {
+                                dispatch(increaseCount(item))
+                              }}
                               className="w-4 h-4"
                             />
                           </span>
@@ -128,10 +104,10 @@ const MyCart: NextPageWithLayout = () => {
                           {item?.price * item?.quantity}
                         </td>
                         <td className="px-6 py-4">
-                          <p className="bg-zinc-900 w-20 text-sm font-semibold text-center text-white py-1 rounded-md">
-                            {/* {calculateDiscount(item.previousPrice,item.price)} */}
-                            % save
-                          </p>
+                          <Trash2
+                            onClick={() => dispatch(removeFromCart(item))}
+                            className="w-4 h-4 hover:text-red-600 cursor-pointer duration-200"
+                          />
                         </td>
                       </tr>
                     </tbody>
@@ -140,8 +116,8 @@ const MyCart: NextPageWithLayout = () => {
               </table>
             </div>
             <button
-              // onClick={handleReset}
-              className="bg-zinc-950 text-zinc-200 w-36 py-3 mt-5 rounded-md uppercase text-xs font-semibold hover:bg-red-700 hover:text-white duration-200"
+              onClick={() => dispatch(clearCart())}
+              className="bg-zinc-950 text-zinc-200 w-36 py-3 mt-5 rounded-md uppercase text-xs font-semibold bg-red-700 text-white duration-200"
             >
               Reset Cart
             </button>
@@ -153,17 +129,19 @@ const MyCart: NextPageWithLayout = () => {
                 Total Items <span>{productsData.length}</span>
               </p>
               <p className="flex items-center justify-between">
-                Price <span>{rowPrice}</span>
-              </p>
-              <p className="flex items-center justify-between">
-                Discount <span>{rowPrice - totalAmt}</span>
-              </p>
-              <p className="flex items-center justify-between">
-                Total Price <span>{totalAmt}</span>
+                Total Price{' '}
+                <span>
+                  {' '}
+                  $
+                  {productsData.reduce(
+                    (a: number, b: ProductProps) => a + b.price * b.quantity,
+                    0,
+                  )}
+                </span>
               </p>
               <button
                 //   onClick={handleCheckout}
-                className="bg-zinc-800 text-zinc-200 my-2 py-2 uppercase text-center rounded-md font-semibold hover:bg-black hover:text-white duration-200"
+                className="bg-zinc-800 text-zinc-200 my-2 py-2 uppercase text-center rounded-md font-semibold bg-black text-white duration-200"
               >
                 Proceed to Checkout
               </button>
