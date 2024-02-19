@@ -1,5 +1,5 @@
 import { createTRPCRouter, publicProcedure } from '../trpc'
-import { Prisma } from '@prisma/client'
+import { CollectionType, Prisma } from '@prisma/client'
 import { z } from 'zod'
 
 export const defaultCollectionSelect =
@@ -33,10 +33,11 @@ export const collectionRouter = createTRPCRouter({
     .input(
       z.object({
         slug: z.string(),
+        type: z.nativeEnum(CollectionType),
       }),
     )
     .query(async ({ input, ctx }) => {
-      const { slug } = input
+      const { slug, type } = input
       const parentCollection = await ctx.prisma.collection.findFirst({
         where: {
           slug: slug,
@@ -47,11 +48,17 @@ export const collectionRouter = createTRPCRouter({
         return []
       }
 
-      return await ctx.prisma.collection.findMany({
+      const cates = await ctx.prisma.collection.findMany({
         select: defaultCollectionSelect,
         where: {
           parentId: parentCollection.id,
         },
       })
+
+      const filteredCollections = cates.filter((collection) =>
+        collection.types.includes(type),
+      )
+
+      return filteredCollections
     }),
 })
