@@ -1,6 +1,5 @@
 import clsx from 'clsx'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useState } from 'react'
 import { BsStarFill } from 'react-icons/bs'
 import { Product } from '@/types'
@@ -8,12 +7,7 @@ import { Button } from '@material-tailwind/react'
 import UnitButton from '../ui/UnitButton'
 import { RiShoppingBasketFill } from 'react-icons/ri'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  addToCart,
-  decreaseCount,
-  increaseCount,
-  removeFromCart,
-} from '@/redux/slices'
+import { addToCart, decreaseCount, increaseCount } from '@/redux/slices'
 import { SelectorStateProps, ProductProps } from '@/redux/types'
 
 const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent`
@@ -88,7 +82,8 @@ export const ProductItem = (product: Product) => {
   return (
     <div className="group rounded-2xl bg-white p-2">
       <div className="relative h-[280px] max-w-[230px]  overflow-hidden rounded-2xl transition">
-        <Link href={productLink} className="relative block h-full w-full">
+        {/* <Link href={productLink} className="relative block h-full w-full"> */}
+        <div className="relative block h-full w-full">
           {images.map(({ imageURL, imageBlur }) => (
             <Image
               key={imageURL}
@@ -104,7 +99,7 @@ export const ProductItem = (product: Product) => {
               blurDataURL={imageBlur}
             />
           ))}
-        </Link>
+        </div>
       </div>
       <div className="mb-1 mt-2 space-y-4 px-1">
         <div className="flex gap-2">

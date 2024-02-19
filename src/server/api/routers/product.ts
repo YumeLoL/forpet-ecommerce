@@ -77,7 +77,6 @@ export const productRouter = createTRPCRouter({
         types: { hasSome: [types] },
         published: true,
         rate: rate ? { gte: rate } : undefined,
-        // price: { gte, lte },
         collectionId:
           collectionIds.length > 0 ? { in: collectionIds } : undefined,
       }
@@ -112,7 +111,7 @@ export const productRouter = createTRPCRouter({
       }
     }),
 
-  one: publicProcedure
+  getOne: publicProcedure
     .input(
       z.object({
         id: z.string(),
@@ -120,9 +119,13 @@ export const productRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }) => {
       const { id } = input
-      return await ctx.prisma.product.findUnique({
+      const res = await ctx.prisma.product.findUnique({
         where: { id },
         select: defaultProductSelect,
       })
+
+      return {
+        product: res,
+      }
     }),
 })
