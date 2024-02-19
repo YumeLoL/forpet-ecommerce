@@ -133,4 +133,18 @@ export const collections: Prisma.CollectionCreateManyInput[] = [
     types: ['CAT'],
     parentId: 5,
   },
+  {
+    id: 24,
+    name: 'Biscuits',
+    slug: 'biscuits',
+    types: ['CAT'],
+    parentId: 4,
+  },
+  {
+    id: 25,
+    name: 'Health',
+    slug: 'health',
+    types: ['DOG'],
+    parentId: 2,
+  },
 ]
