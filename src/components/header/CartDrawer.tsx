@@ -11,8 +11,12 @@ import { ProductProps, SelectorStateProps } from '@/redux/types'
 import Image from 'next/image'
 import { removeFromCart } from '@/redux/slices'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 function CartDrawer() {
+  const { data: session, status } = useSession()
+  console.log('session')
+
   const router = useRouter()
   const dispatch = useDispatch()
   const [openRight, setOpenRight] = useState(false)
@@ -160,7 +164,13 @@ function CartDrawer() {
                 Keep Shopping
               </Button>
               <Button
-                onClick={() => router.push('/my-cart')}
+                onClick={() => {
+                  if (status === 'authenticated' && session) {
+                    router.push('/my-cart')
+                  } else {
+                    router.push('/signin')
+                  }
+                }}
                 size="sm"
                 placeholder={undefined}
               >

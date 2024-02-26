@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply bg-neutral-100;
+  /* @apply bg-neutral-100; */
 }
 
 /* Width */
@@ -65,4 +65,3 @@ body {
   pointer-events: all;
   position: relative;
 }
-

@@ -9,7 +9,7 @@ import { api } from '@/utils/api'
 import { Inter } from 'next/font/google'
 import { SessionProvider } from 'next-auth/react'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { Analytics } from '@vercel/analytics/react'
+// import { Analytics } from '@vercel/analytics/react'
 import { DefaultSeo } from 'next-seo'
 import NextNProgress from 'nextjs-progressbar'
 import AOS from 'aos'
@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             {getLayout(
               <>
                 <NextNProgress
-                  color="#8b5cf6"
+                  color="#00B1B9"
                   height={3}
                   options={{ showSpinner: false }}
                 />
@@ -57,7 +57,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                 </ThemeProvider>
               </>,
             )}
-            <Analytics />
+            {/* <Analytics /> */}
           </main>
           <ReactQueryDevtools />
         </SessionProvider>

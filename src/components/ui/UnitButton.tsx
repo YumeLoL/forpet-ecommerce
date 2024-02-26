@@ -7,6 +7,7 @@ type Props = {
   price: number
   setSelectedUnit: any
   selectedUnit: any
+  size?: 'small' | 'large'
 }
 
 function UnitButton({
@@ -16,6 +17,7 @@ function UnitButton({
   price,
   setSelectedUnit,
   selectedUnit,
+  size = 'small',
 }: Props) {
   const isSelected =
     selectedUnit &&
@@ -28,7 +30,7 @@ function UnitButton({
         onClick={() => {
           setSelectedUnit({ id, quantity, unit, price })
         }}
-        className={`cursor-pointer text-xs font-medium text-gray-900 border border-gray-300 rounded-md px-1 py-0.5 ${isSelected ? 'bg-gray-200' : ''} `}
+        className={`cursor-pointer px-1 py-0.5  text-gray-900 border border-green-200 rounded-md ${size === 'small' ? 'text-xs px-1 py-0.5' : 'text-md px-2 py-1'} ${isSelected ? 'bg-green-50' : ''} `}
       >
         {quantity}x{unit}
       </div>
