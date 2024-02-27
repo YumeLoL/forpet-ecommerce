@@ -9,6 +9,7 @@ import { RiShoppingBasketFill } from 'react-icons/ri'
 import { useDispatch, useSelector } from 'react-redux'
 import { addToCart, decreaseCount, increaseCount } from '@/redux/slices'
 import { SelectorStateProps, ProductProps } from '@/redux/types'
+import Link from 'next/link'
 
 const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent`
 
@@ -55,7 +56,7 @@ export const ProductItem = (product: Product) => {
   const [currentImage, setCurrentImage] = useState(images[0].imageURL)
   const [selectedUnit, setSelectedUnit] = useState<PriceProps>(prices[0])
 
-  const productLink = `/product/${id}/${slug}`
+  const productLink = `/product/${collection.slug}/${slug}_${id}`
 
   const currentProduct = {
     id: product.id,
@@ -80,26 +81,27 @@ export const ProductItem = (product: Product) => {
   )
 
   return (
-    <div className="group rounded-2xl bg-white p-2">
+    <div className="group rounded-lg border border-gray-300 p-2">
       <div className="relative h-[280px] max-w-[230px]  overflow-hidden rounded-2xl transition">
-        {/* <Link href={productLink} className="relative block h-full w-full"> */}
-        <div className="relative block h-full w-full">
-          {images.map(({ imageURL, imageBlur }) => (
-            <Image
-              key={imageURL}
-              src={imageURL}
-              alt={`${name} image`}
-              className={clsx('absolute h-full w-full duration-700 ', {
-                'opacity-100': currentImage === imageURL,
-                'opacity-0': currentImage !== imageURL,
-              })}
-              width={230}
-              height={280}
-              placeholder="blur"
-              blurDataURL={imageBlur}
-            />
-          ))}
-        </div>
+        <Link href={productLink} className="relative block h-full w-full">
+          <div className="relative block h-full w-full">
+            {images.map(({ imageURL, imageBlur }) => (
+              <Image
+                key={imageURL}
+                src={imageURL}
+                alt={`${name} image`}
+                className={clsx('absolute h-full w-full duration-700 ', {
+                  'opacity-100': currentImage === imageURL,
+                  'opacity-0': currentImage !== imageURL,
+                })}
+                width={230}
+                height={280}
+                placeholder="blur"
+                blurDataURL={imageBlur}
+              />
+            ))}
+          </div>
+        </Link>
       </div>
       <div className="mb-1 mt-2 space-y-4 px-1">
         <div className="flex gap-2">
@@ -185,7 +187,7 @@ export const ProductItem = (product: Product) => {
             <Button
               variant="gradient"
               size={'sm'}
-              color={'green'}
+              color={'orange'}
               className="flex justify-center items-center gap-3"
               placeholder={undefined}
               onClick={() => {

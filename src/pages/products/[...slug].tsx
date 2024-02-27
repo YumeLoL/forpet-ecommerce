@@ -50,8 +50,6 @@ const Products: NextPageWithLayout = () => {
     lte: number | undefined
   }
 
-  console.log(router.query)
-
   const queryInput = useMemo(
     () => ({
       types: slug && (slug[0].toUpperCase() as CollectionType),
@@ -67,8 +65,6 @@ const Products: NextPageWithLayout = () => {
 
   const { data, isLoading, isPreviousData } =
     api.product.all.useQuery(queryInput)
-
-  console.log('all products', data)
 
   const pageSize = 12
 

@@ -4,7 +4,7 @@ import { useState, useEffect, ReactElement } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import { Minus, Plus, Trash2, X } from 'lucide-react'
-// import { loadStripe } from '@stripe/stripe-js'
+import { loadStripe } from '@stripe/stripe-js'
 import { SelectorStateProps, ProductProps } from '@/redux/types'
 import Link from 'next/link'
 import type { NextPageWithLayout } from '../_app'
@@ -15,10 +15,6 @@ import {
   increaseCount,
   removeFromCart,
 } from '@/redux/slices'
-
-// const promisePayment = loadStripe(
-//   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
-// )
 
 const MyCart: NextPageWithLayout = () => {
   const [totalAmt, setTotalAmt] = useState(0)
@@ -33,6 +29,29 @@ const MyCart: NextPageWithLayout = () => {
   const { data: session } = useSession()
 
   console.log(session)
+
+  const promisePayment = loadStripe(
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
+  )
+  const handleCheckout = async () => {
+    const stripe = await promisePayment
+    const response = await fetch('http://localhost:3000/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        purchases: productsData,
+        email: session?.user?.email,
+      }),
+    })
+
+    const data = await response.json()
+
+    if (response.ok) {
+      stripe?.redirectToCheckout({ sessionId: data.id })
+    } else {
+      throw new Error('Faild to complate payment process')
+    }
+  }
 
   return (
     <div className=" p-4 lg:p-6">
@@ -140,7 +159,7 @@ const MyCart: NextPageWithLayout = () => {
                 </span>
               </p>
               <button
-                //   onClick={handleCheckout}
+                onClick={handleCheckout}
                 className="bg-zinc-800 text-zinc-200 my-2 py-2 uppercase text-center rounded-md font-semibold bg-black text-white duration-200"
               >
                 Proceed to Checkout

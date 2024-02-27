@@ -34,7 +34,7 @@ export const ProductCategory = () => {
   }
 
   return (
-    <div className="rounded-lg bg-neutral-100">
+    <div className="rounded-lg">
       <Accordion open>
         <Accordion.Header className="flex w-full items-center justify-between px-2.5 py-2.5 text-sm font-semibold text-neutral-600">
           Type
