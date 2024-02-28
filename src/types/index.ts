@@ -4,4 +4,4 @@ export type Collections = RouterOutputs['collection']['all'] | undefined
 
 export type Product = RouterOutputs['product']['all']['products'][0]
 
-export type Address = RouterOutputs['address']['updateAddress']
+export type Address = RouterOutputs['address']['all']
