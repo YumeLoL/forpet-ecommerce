@@ -1,5 +1,9 @@
 import { Product } from '@/types'
-import { ProductItem, Skeleton } from '../product/ProductItem'
+import { ProductItem } from '../product/ProductItem'
+import React, { useState } from 'react'
+import { ChevronLeftIcon, ChevronRightIcon, ChevronsRight } from 'lucide-react'
+import Link from 'next/link'
+import useShowCount from '@/hooks/useShowCount'
 
 type Props = {
   newCat: Product[] | undefined
@@ -14,6 +18,27 @@ export const NewProducts = ({
   isCatLoading,
   isDogLoading,
 }: Props) => {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const showCount = useShowCount({
+    mobileCount: 1,
+    tabletCount: 2,
+    smDesktopCount: 3,
+    desktopCount: 4,
+  })
+
+  const moveCarousel = (direction: any) => {
+    if (!newCat) return
+    if (direction === 'left') {
+      setCurrentIndex((prevIndex) =>
+        prevIndex > 0 ? prevIndex - 1 : Math.max(newCat.length - showCount, 0),
+      )
+    } else if (direction === 'right') {
+      setCurrentIndex((prevIndex) =>
+        prevIndex < Math.max(newCat.length - showCount, 0) ? prevIndex + 1 : 0,
+      )
+    }
+  }
+
   return (
     <div className="bg-white">
       <div className="mx-auto flex flex-col items-center px-4 py-10 md:container">
@@ -24,26 +49,33 @@ export const NewProducts = ({
           New Coming Products
         </h2>
 
-        <div className="grid w-full max-w-[1150px] gap-3 sm:grid-cols-4">
-          {isCatLoading &&
-            Array(8)
-              .fill('')
-              .map((_, index) => <Skeleton key={index} />)}
-          {newCat &&
-            newCat.map((product, index) => (
-              <ProductItem {...product} key={index} />
-            ))}
-        </div>
+        <Link
+          className="flex items-center justify-end px-12 mb-6 w-full font-bold text-primary-darker "
+          href="/products/cat?page=1"
+        >
+          <ChevronsRight fontWeight={'bold'} />
+          <p className="text-md md:text-xl "> View All Cat&apos;s Products</p>
+        </Link>
 
-        <div className="grid w-full max-w-[1150px] gap-3 sm:grid-cols-4">
-          {isDogLoading &&
-            Array(8)
-              .fill('')
-              .map((_, index) => <Skeleton key={index} />)}
-          {newDog &&
-            newDog.map((product, index) => (
-              <ProductItem {...product} key={index} />
-            ))}
+        <div className="flex items-center w-full justify-center">
+          <button onClick={() => moveCarousel('left')} className="mr-2">
+            <ChevronLeftIcon className="h-8 w-8 text-gray-700" />
+          </button>
+
+          <div className="w-full flex justify-around overflow-hidden">
+            {newCat &&
+              newCat
+                .slice(currentIndex, currentIndex + showCount)
+                .map((product, index) => (
+                  <div key={product.id} className="w-full max-w-[280px]">
+                    <ProductItem {...product} />
+                  </div>
+                ))}
+          </div>
+
+          <button onClick={() => moveCarousel('right')} className="ml-2">
+            <ChevronRightIcon className="h-8 w-8 text-gray-700" />
+          </button>
         </div>
       </div>
     </div>
