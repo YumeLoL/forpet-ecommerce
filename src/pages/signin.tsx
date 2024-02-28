@@ -8,6 +8,7 @@ import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useSession, signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 export const getStaticProps: GetStaticProps = async ({ locale = 'en' }) => {
   return {
@@ -19,17 +20,13 @@ export const getStaticProps: GetStaticProps = async ({ locale = 'en' }) => {
 
 const Signin: NextPageWithLayout = () => {
   const { t } = useTranslation('header')
+  const navigate = useRouter()
 
   const { data, status } = useSession()
-  console.log('check session', data)
 
   if (status === 'loading') return <h1> loading... please wait</h1>
   if (status === 'authenticated') {
-    return (
-      <div>
-        <h1> hi {data.user?.name}</h1>
-      </div>
-    )
+    navigate.push('/my-account')
   }
 
   return (
