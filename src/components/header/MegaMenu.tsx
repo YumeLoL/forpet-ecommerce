@@ -87,7 +87,6 @@ export const MegaMenu = ({
         </div>
         <div className="flex flex-col flex-[3] border-l border-solid shadow-neutral-300">
           <p className="ml-4 pt-8 text-sm font-bold uppercase leading-4 tracking-widest text-neutral-800">
-            {/* {capitalizeFirstLetter(typeInLowerCase)} */}
             Shop by Category
           </p>
 
@@ -129,11 +128,11 @@ export const MegaMenu = ({
         <div className="mx-auto flex max-w-7xl">
           <div className="flex flex-1 items-center">
             <Link
-              href="/"
+              href={`/products/${typeInLowerCase}?page=1`}
               className="ml-4 w-full max-w-[150px] py-3 text-xs font-bold text-neutral-800 hover:underline"
               onClick={onCloseMenu}
             >
-              Sale
+              {`View All ${capitalizeFirstLetter(typeInLowerCase)}'s Products`}
             </Link>
           </div>
           <div className="flex flex-[3] items-center">

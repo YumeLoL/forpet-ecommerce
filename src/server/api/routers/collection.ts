@@ -38,6 +38,7 @@ export const collectionRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }) => {
       const { slug, type } = input
+
       const parentCollection = await ctx.prisma.collection.findFirst({
         where: {
           slug: slug,
@@ -60,5 +61,24 @@ export const collectionRouter = createTRPCRouter({
       )
 
       return filteredCollections
+    }),
+
+  getAllCategories: publicProcedure
+    .input(
+      z.object({
+        type: z.nativeEnum(CollectionType),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const { type } = input
+
+      const cates = await ctx.prisma.collection.findMany({
+        select: defaultCollectionSelect,
+        where: {
+          types: { hasSome: [type] },
+        },
+      })
+
+      return cates
     }),
 })
