@@ -111,6 +111,31 @@ export const productRouter = createTRPCRouter({
       }
     }),
 
+  getNewProducts: publicProcedure
+    .input(
+      z.object({
+        take: z.number(),
+        types: z.nativeEnum(CollectionType),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const { take } = input
+      const res = await ctx.prisma.product.findMany({
+        select: defaultProductSelect,
+        where: {
+          types: { hasSome: [input.types] },
+          published: true,
+        },
+        orderBy: {
+          id: 'desc',
+        },
+      })
+
+      return {
+        products: res.slice(0, take),
+      }
+    }),
+
   getOne: publicProcedure
     .input(
       z.object({
