@@ -21,7 +21,6 @@ export const CollectionsPage = ({
   return (
     <div className="fixed bottom-0 left-0 top-0 z-50 h-full w-full overflow-y-auto bg-white px-5 pt-5">
       <div className="flex justify-between">
-        <h2 className="text-xl font-medium">{t('common:collections')}</h2>
         <FiX
           className="cursor-pointer"
           size="1.5rem"
@@ -94,4 +93,3 @@ export const CollectionsPage = ({
     </div>
   )
 }
-

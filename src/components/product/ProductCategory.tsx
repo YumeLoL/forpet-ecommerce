@@ -13,10 +13,14 @@ export const ProductCategory = () => {
 
   if (!slug) return null
 
-  const { data: categories } = api.collection.getAllBySlug.useQuery({
-    type: slug[0].toUpperCase() as CollectionType,
-    slug: slug[1],
-  })
+  const { data: categories } = slug[1]
+    ? api.collection.getAllBySlug.useQuery({
+        type: slug[0].toUpperCase() as CollectionType,
+        slug: slug[1],
+      })
+    : api.collection.getAllCategories.useQuery({
+        type: slug[0].toUpperCase() as CollectionType,
+      })
 
   const subCate: { name: string; slug: string }[] = []
   categories?.map((item) => {

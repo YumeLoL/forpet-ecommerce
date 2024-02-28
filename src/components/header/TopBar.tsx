@@ -19,10 +19,10 @@ export const TopBar = () => {
 
   return (
     <div className=" bg-[#414141] text-[10px] text-gray-300 md:text-xs ">
-      <div className="mx-auto flex flex-col items-center px-4 py-1 md:flex-row md:py-1.5 max-w-7xl">
-        <p className="pb-2 md:pb-0">Get 25% discount on a first purchase.</p>
+      <div className="mx-auto flex justify-center sm:justify-between  items-center  px-4 py-1 md:py-1.5 max-w-7xl">
+        <p className="pb-0 md:pb-0">Get 25% discount on a first purchase.</p>
 
-        <ul className="flex flex-wrap gap-3 justify-center md:ml-auto">
+        <ul className="hidden sm:flex flex-wrap gap-3 justify-center md:ml-auto ">
           {session && (
             <Menu>
               <MenuHandler>

@@ -53,7 +53,7 @@ export const Header = ({ collections }: { collections: Collections }) => {
 
         <div className="bg-green-800">
           <div className="mx-auto flex h-full items-center justify-between px-4 max-w-7xl">
-            <ul className="ml-auto hidden h-full md:flex ">
+            <ul className="ml-auto hidden h-full sm:flex ">
               {navLinks.map((item, index) => (
                 <li
                   className={`py-2 font-medium transition-colors ${

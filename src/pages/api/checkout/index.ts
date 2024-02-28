@@ -1,7 +1,9 @@
 import { ProductProps } from '@/redux/types'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import Stripe from 'stripe'
+import getConfig from 'next/config'
 
+const { publicRuntimeConfig } = getConfig()
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse,
@@ -20,7 +22,7 @@ export default async function handler(
           product_data: {
             name: purchase.name,
             description: purchase.description,
-            images: ['public/assets/products/product-1.webp'],
+            images: [`${publicRuntimeConfig.basePath}${purchase.image}`],
           },
         },
       }))

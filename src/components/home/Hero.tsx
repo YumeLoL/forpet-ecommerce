@@ -5,12 +5,12 @@ import { Carousel } from '@material-tailwind/react'
 
 export const Hero = () => {
   return (
-    <Carousel placeholder={undefined} className="bg-orange-100">
+    <Carousel placeholder={undefined} className="bg-red-50">
       {[1, 2, 3].map((index) => {
         return (
           <div
             key={index}
-            className="mx-auto flex h-[50vh] max-w-7xl flex-col px-4 md:flex-row"
+            className="mx-auto flex min-h-[50vh] max-w-7xl flex-col px-4 md:flex-row"
           >
             <div className="flex flex-1 flex-col items-center justify-center pt-10 md:items-start md:px-4 md:pt-0">
               <span
@@ -23,14 +23,14 @@ export const Hero = () => {
               <h2
                 data-aos="fade-right"
                 data-aos-delay="300"
-                className="mb-5 text-center text-[2rem] font-bold leading-tight text-black md:text-left md:text-5xl"
+                className="mb-5 text-center text-[1.2rem] sm:text-[2rem] font-bold leading-tight text-black md:text-left md:text-5xl"
               >
                 Everyday Great Prices on CAT FOOD
               </h2>
               <h3
                 data-aos="fade-right"
                 data-aos-delay="400"
-                className="font-regular mb-5 text-center text-lg leading-tight text-neutral-700 md:mb-10 md:text-left"
+                className="font-regular mb-5 text-center text-md sm:text-lg leading-tight text-neutral-700 md:mb-10 md:text-left"
               >
                 Best price guarantee. Everyday Great Prices on CAT FOOD
               </h3>
@@ -45,7 +45,7 @@ export const Hero = () => {
               </Link>
             </div>
 
-            <div className="flex flex-1 items-center justify-center md:justify-end">
+            <div className="flex flex-1 items-center justify-center md:justify-end my-12">
               <div className="max-w-[250px] md:max-w-[550px]">
                 <Image
                   priority
