@@ -79,6 +79,6 @@ export const collectionRouter = createTRPCRouter({
         },
       })
 
-      return cates
+      return cates.slice(4)
     }),
 })

@@ -9,8 +9,6 @@ export const ProductCategory = () => {
   const { addQuery, removeQuery } = useQuery({ shallow: true, scroll: true })
   const { slug, cate: slectedCate = '' } = router.query
 
-  console.log('route query', router.query)
-
   if (!slug) return null
 
   const { data: categories } = slug[1]
