@@ -18,18 +18,22 @@ import {
 import { api } from '@/utils/api'
 import { Button, Checkbox } from '@material-tailwind/react'
 import { Circle } from 'lucide-react'
+import { createRouteLoader } from 'next/dist/client/route-loader'
 
+const promisePayment = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
+)
 const MyCart: NextPageWithLayout = () => {
-  const [totalAmt, setTotalAmt] = useState(0)
-  const [rowPrice, setRowPrice] = useState(0)
-
   const { productsData } = useSelector(
     (state: SelectorStateProps | any) => state.combine.cart,
   )
+  const [addressId, setAddressId] = useState('')
 
   const dispatch = useDispatch()
   const router = useRouter()
+
   const { data: session } = useSession()
+
   const trpc = api.useUtils()
   const { data: addresses } = api.address.all.useQuery({
     userId: session?.user?.id as string,
@@ -39,13 +43,11 @@ const MyCart: NextPageWithLayout = () => {
       await trpc.address.all.invalidate()
     },
   })
+  const { mutate: makeOrder } = api.order.create.useMutation()
 
-  const promisePayment = loadStripe(
-    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
-  )
   const handleCheckout = async () => {
     const stripe = await promisePayment
-    const response = await fetch('http://localhost:3000/api/checkout', {
+    const response = await fetch(`api/checkout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -58,7 +60,16 @@ const MyCart: NextPageWithLayout = () => {
 
     if (response.ok) {
       stripe?.redirectToCheckout({ sessionId: data.id })
-      console.log('checkout ----', response)
+
+      makeOrder({
+        userId: session?.user?.id as string,
+        addressId,
+        purchase: productsData,
+        paymentAmount: productsData
+          .reduce((a: number, b: ProductProps) => a + b.price * b.quantity, 0)
+          .toFixed(2),
+      })
+
       dispatch(clearCart())
     } else {
       throw new Error('Faild to complate payment process')
@@ -165,10 +176,12 @@ const MyCart: NextPageWithLayout = () => {
                 <span>
                   {' '}
                   $
-                  {productsData.reduce(
-                    (a: number, b: ProductProps) => a + b.price * b.quantity,
-                    0,
-                  )}
+                  {productsData
+                    .reduce(
+                      (a: number, b: ProductProps) => a + b.price * b.quantity,
+                      0,
+                    )
+                    .toFixed(2)}
                 </span>
               </p>
 
@@ -190,13 +203,14 @@ const MyCart: NextPageWithLayout = () => {
                       <div
                         className="w-full items-center flex gap-4"
                         key={address.id}
-                        onClick={() =>
+                        onClick={() => {
                           update({
                             isDefault: !address.isDefault,
                             id: address.id,
                             userId: session?.user?.id as string,
                           })
-                        }
+                          setAddressId(address.id)
+                        }}
                       >
                         <div
                           className={`${address.isDefault ? 'bg-green-400' : 'bg-white'} border-2 cursor-pointer border-gray-800   overflow-hidden rounded-full w-4 h-4`}

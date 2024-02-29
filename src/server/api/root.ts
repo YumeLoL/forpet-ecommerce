@@ -2,6 +2,7 @@ import { createTRPCRouter } from './trpc'
 import { collectionRouter } from './routers/collection'
 import { productRouter } from './routers/product'
 import { addressRouter } from './routers/address'
+import { orderRouter } from './routers/order'
 
 /**
  * This is the primary router for your server.
@@ -13,6 +14,7 @@ export const appRouter = createTRPCRouter({
   product: productRouter,
   // merchant: merchantRouter,
   address: addressRouter,
+  order: orderRouter,
 })
 
 // export type definition of API
