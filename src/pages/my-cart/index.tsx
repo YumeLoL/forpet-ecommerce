@@ -40,8 +40,6 @@ const MyCart: NextPageWithLayout = () => {
     },
   })
 
-  const defaustShippingId = addresses?.find((a) => a.isDefault)?.id
-
   const promisePayment = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
   )
@@ -60,7 +58,8 @@ const MyCart: NextPageWithLayout = () => {
 
     if (response.ok) {
       stripe?.redirectToCheckout({ sessionId: data.id })
-      router.push('/success')
+      console.log('checkout ----', response)
+      dispatch(clearCart())
     } else {
       throw new Error('Faild to complate payment process')
     }
