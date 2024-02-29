@@ -14,9 +14,9 @@ const useShowCount = ({
 
     if (width < 480) {
       return mobileCount
-    } else if (width >= 480 && width <= 768) {
+    } else if (width >= 480 && width <= 820) {
       return tabletCount
-    } else if (width > 768 && width <= 1024) {
+    } else if (width > 820 && width <= 1280) {
       return smDesktopCount
     } else {
       return desktopCount

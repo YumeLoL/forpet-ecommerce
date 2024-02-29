@@ -114,7 +114,7 @@ export const NewProducts = ({
                 newDog
                   .slice(currentIndex, currentIndex + showCount)
                   .map((product) => (
-                    <div key={product.id} className="w-full max-w-[280px]">
+                    <div key={product.id} className="w-full max-w-[230px]">
                       <ProductItem {...product} />
                     </div>
                   ))}
