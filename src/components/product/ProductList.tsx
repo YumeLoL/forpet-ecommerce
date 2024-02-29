@@ -15,7 +15,7 @@ export const ProductsList = ({ products, isLoading }: Props) => {
           .map((_, index) => <Skeleton key={index} />)}
       {products &&
         products.map((product) => (
-          <div key={product.id}>
+          <div key={product.id} className="w-full max-w-[230px]">
             <ProductItem {...product} />
           </div>
         ))}

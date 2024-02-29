@@ -18,7 +18,8 @@ export const NewProducts = ({
   isCatLoading,
   isDogLoading,
 }: Props) => {
-  const [currentIndex, setCurrentIndex] = useState(0)
+  const [currentCatIndex, setCurrentCatIndex] = useState(0)
+  const [currentDogIndex, setCurrentDogIndex] = useState(0)
   const showCount = useShowCount({
     mobileCount: 1,
     tabletCount: 2,
@@ -29,11 +30,11 @@ export const NewProducts = ({
   const moveCarousel = (direction: any) => {
     if (!newCat) return
     if (direction === 'left') {
-      setCurrentIndex((prevIndex) =>
+      setCurrentCatIndex((prevIndex) =>
         prevIndex > 0 ? prevIndex - 1 : Math.max(newCat.length - showCount, 0),
       )
     } else if (direction === 'right') {
-      setCurrentIndex((prevIndex) =>
+      setCurrentCatIndex((prevIndex) =>
         prevIndex < Math.max(newCat.length - showCount, 0) ? prevIndex + 1 : 0,
       )
     }
@@ -42,11 +43,11 @@ export const NewProducts = ({
   const moveDogCarousel = (direction: any) => {
     if (!newDog) return
     if (direction === 'left') {
-      setCurrentIndex((prevIndex) =>
+      setCurrentDogIndex((prevIndex) =>
         prevIndex > 0 ? prevIndex - 1 : Math.max(newDog.length - showCount, 0),
       )
     } else if (direction === 'right') {
-      setCurrentIndex((prevIndex) =>
+      setCurrentDogIndex((prevIndex) =>
         prevIndex < Math.max(newDog.length - showCount, 0) ? prevIndex + 1 : 0,
       )
     }
@@ -79,9 +80,9 @@ export const NewProducts = ({
             <div className="w-full flex justify-around overflow-hidden">
               {newCat &&
                 newCat
-                  .slice(currentIndex, currentIndex + showCount)
+                  .slice(currentCatIndex, currentCatIndex + showCount)
                   .map((product, index) => (
-                    <div key={product.id} className="w-full max-w-[280px]">
+                    <div key={product.id} className="w-full max-w-[230px]">
                       <ProductItem {...product} />
                     </div>
                   ))}
@@ -112,7 +113,7 @@ export const NewProducts = ({
             <div className="w-full flex justify-around overflow-hidden">
               {newDog &&
                 newDog
-                  .slice(currentIndex, currentIndex + showCount)
+                  .slice(currentDogIndex, currentDogIndex + showCount)
                   .map((product) => (
                     <div key={product.id} className="w-full max-w-[230px]">
                       <ProductItem {...product} />
