@@ -22,17 +22,17 @@ export default function AccountDetails({ session }: Props) {
       <hr className="my-4 border-gray-300 w-full" />
 
       <div className="w-full">
-        <div className="mb-4 flex gap-2">
+        <div className="mb-4 flex flex-col md:flex-row gap-2">
           <p className="font-bold">Account ID:</p>
           <p>{session?.user?.id}</p>
         </div>
 
-        <div className="mb-4 flex gap-2">
+        <div className="mb-4 flex flex-col md:flex-row gap-2">
           <p className="font-bold">Email:</p>
           <p>{session?.user?.email}</p>
         </div>
 
-        <div className="mb-4 flex gap-2">
+        <div className="mb-4 flex flex-col md:flex-row gap-2">
           <p className="font-bold">User Name:</p>
           <p>{session?.user?.name}</p>
         </div>
