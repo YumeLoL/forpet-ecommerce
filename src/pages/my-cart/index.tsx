@@ -15,6 +15,8 @@ import {
   increaseCount,
   removeFromCart,
 } from '@/redux/slices'
+import { api } from '@/utils/api'
+import { Button } from '@material-tailwind/react'
 
 const MyCart: NextPageWithLayout = () => {
   const [totalAmt, setTotalAmt] = useState(0)
@@ -27,8 +29,9 @@ const MyCart: NextPageWithLayout = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const { data: session } = useSession()
-
-  console.log(session)
+  const { data: addresses } = api.address.all.useQuery({
+    userId: session?.user?.id as string,
+  })
 
   const promisePayment = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
@@ -48,6 +51,7 @@ const MyCart: NextPageWithLayout = () => {
 
     if (response.ok) {
       stripe?.redirectToCheckout({ sessionId: data.id })
+      router.push('/success')
     } else {
       throw new Error('Faild to complate payment process')
     }
@@ -140,6 +144,7 @@ const MyCart: NextPageWithLayout = () => {
             >
               Reset Cart
             </button>
+
             <div className="mt-4 bg-white max-w-xl p-4 flex flex-col gap-1">
               <p className="border-b-[1px] border-b-designColor py-1">
                 Cart Summary
@@ -178,6 +183,41 @@ const MyCart: NextPageWithLayout = () => {
           </div>
         )}
       </>
+
+      <div className="w-full mt-8">
+        <h1 className="text-xl font-semibold mb-4">Shipping Address</h1>
+        {addresses &&
+          addresses.length > 0 &&
+          addresses?.map((address) => {
+            return (
+              <>
+                <div className="w-full" key={address.id}>
+                  <p>
+                    {address.address}, {address.city}, {address.state}.{' '}
+                    {address.country}. {address.zipCode}{' '}
+                  </p>
+                </div>
+                <hr className="my-4 border-gray-300 w-full" />
+              </>
+            )
+          })}
+
+        {!addresses ||
+          (addresses.length === 0 && (
+            <div>
+              <p className="text-sm text-gray-500 mb-4">No shipping address</p>
+              <Button
+                className="w-fit"
+                onClick={() => {}}
+                size="sm"
+                color="green"
+                placeholder={undefined}
+              >
+                Add Address
+              </Button>
+            </div>
+          ))}
+      </div>
     </div>
   )
 }

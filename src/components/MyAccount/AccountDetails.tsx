@@ -7,9 +7,10 @@ import React, { useState } from 'react'
 
 type Props = {
   session: Session
+  setIsMenu: React.Dispatch<React.SetStateAction<string>>
 }
 
-export default function AccountDetails({ session }: Props) {
+export default function AccountDetails({ session, setIsMenu }: Props) {
   if (!session.user) return null
 
   const { data: addresses } = api.address.all.useQuery({
@@ -71,7 +72,7 @@ export default function AccountDetails({ session }: Props) {
             <p className="text-sm text-gray-500 mb-4">No shipping address</p>
             <Button
               className="w-fit"
-              onClick={() => {}}
+              onClick={() => setIsMenu('address')}
               size="sm"
               color="green"
               placeholder={undefined}
