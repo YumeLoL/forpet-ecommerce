@@ -82,8 +82,8 @@ export const ProductItem = (product: Product) => {
 
   return (
     <div className="group rounded-lg border border-gray-300 p-2">
-      <div className="relative h-[280px] max-w-[230px]  overflow-hidden rounded-2xl transition">
-        <Link href={productLink} className="relative block h-full w-full">
+      <div className="flex items-center h-[230px] max-w-[230px] overflow-hidden transition">
+        <Link href={productLink} className="h-full w-full">
           <div className="relative block h-full w-full">
             {images.map(({ imageURL, imageBlur }) => (
               <Image
@@ -95,7 +95,7 @@ export const ProductItem = (product: Product) => {
                   'opacity-0': currentImage !== imageURL,
                 })}
                 width={230}
-                height={280}
+                height={230}
                 placeholder="blur"
                 blurDataURL={imageBlur}
               />

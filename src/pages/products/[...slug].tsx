@@ -84,6 +84,12 @@ const Products: NextPageWithLayout = () => {
           <Navigation />
         </div>
         <div className="flex-[5]">
+          {data?.products.length === 0 && data.totalCount === 0 && (
+            <div className="text-center">
+              <h1 className="text-lg font-bold">No Products Found</h1>
+              <p className="text-md">Try different category type</p>
+            </div>
+          )}
           <ProductsList products={data?.products} isLoading={isLoading} />
           <div className="flex justify-center py-5">
             <Pagination
