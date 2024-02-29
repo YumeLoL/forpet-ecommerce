@@ -15,6 +15,9 @@ import {
   increaseCount,
   removeFromCart,
 } from '@/redux/slices'
+import { api } from '@/utils/api'
+import { Button, Checkbox } from '@material-tailwind/react'
+import { Circle } from 'lucide-react'
 
 const MyCart: NextPageWithLayout = () => {
   const [totalAmt, setTotalAmt] = useState(0)
@@ -27,8 +30,15 @@ const MyCart: NextPageWithLayout = () => {
   const dispatch = useDispatch()
   const router = useRouter()
   const { data: session } = useSession()
-
-  console.log(session)
+  const trpc = api.useUtils()
+  const { data: addresses } = api.address.all.useQuery({
+    userId: session?.user?.id as string,
+  })
+  const { mutate: update } = api.address.updateDefault.useMutation({
+    onSettled: async () => {
+      await trpc.address.all.invalidate()
+    },
+  })
 
   const promisePayment = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
@@ -48,6 +58,8 @@ const MyCart: NextPageWithLayout = () => {
 
     if (response.ok) {
       stripe?.redirectToCheckout({ sessionId: data.id })
+      console.log('checkout ----', response)
+      dispatch(clearCart())
     } else {
       throw new Error('Faild to complate payment process')
     }
@@ -140,6 +152,7 @@ const MyCart: NextPageWithLayout = () => {
             >
               Reset Cart
             </button>
+
             <div className="mt-4 bg-white max-w-xl p-4 flex flex-col gap-1">
               <p className="border-b-[1px] border-b-designColor py-1">
                 Cart Summary
@@ -158,9 +171,70 @@ const MyCart: NextPageWithLayout = () => {
                   )}
                 </span>
               </p>
+
+              <div className="flex items-center justify-between border-b-[1px] border-b-designColor py-1 mt-4">
+                <p className="">Shipping Address</p>
+                <p
+                  className="w-fit text-yellow-900 text-sm cursor-pointer"
+                  onClick={() => router.push('/my-account')}
+                >
+                  Edit
+                </p>
+              </div>
+
+              {addresses &&
+                addresses.length > 0 &&
+                addresses?.map((address) => {
+                  return (
+                    <>
+                      <div
+                        className="w-full items-center flex gap-4"
+                        key={address.id}
+                        onClick={() =>
+                          update({
+                            isDefault: !address.isDefault,
+                            id: address.id,
+                            userId: session?.user?.id as string,
+                          })
+                        }
+                      >
+                        <div
+                          className={`${address.isDefault ? 'bg-green-400' : 'bg-white'} border-2 cursor-pointer border-gray-800   overflow-hidden rounded-full w-4 h-4`}
+                        />
+
+                        <p>
+                          {address.address}, {address.city}, {address.state}.{' '}
+                          {address.country}. {address.zipCode}{' '}
+                        </p>
+                        <p className="text-sm italic text-gray-500">
+                          {' '}
+                          {address.isDefault && 'default'}
+                        </p>
+                      </div>
+                    </>
+                  )
+                })}
+
+              {!addresses ||
+                (addresses.length === 0 && (
+                  <div>
+                    <p className="text-sm text-gray-500 mb-4">
+                      No shipping address
+                    </p>
+                    <Button
+                      className="w-fit"
+                      onClick={() => router.push('/my-account')}
+                      size="sm"
+                      color="green"
+                      placeholder={undefined}
+                    >
+                      Add Address
+                    </Button>
+                  </div>
+                ))}
               <button
                 onClick={handleCheckout}
-                className="bg-zinc-800 text-zinc-200 my-2 py-2 uppercase text-center rounded-md font-semibold bg-black text-white duration-200"
+                className="bg-zinc-800 text-zinc-200 my-8 py-2 uppercase text-center rounded-md font-semibold bg-black text-white duration-200"
               >
                 Proceed to Checkout
               </button>
@@ -178,6 +252,8 @@ const MyCart: NextPageWithLayout = () => {
           </div>
         )}
       </>
+
+      <div className="w-full mt-8"></div>
     </div>
   )
 }

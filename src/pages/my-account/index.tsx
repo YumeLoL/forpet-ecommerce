@@ -8,6 +8,9 @@ import {
   ListItem,
   ListItemSuffix,
   Chip,
+  Tabs,
+  TabsHeader,
+  Tab,
 } from '@material-tailwind/react'
 import AccountDetails from '@/components/MyAccount/AccountDetails'
 import Address from '@/components/MyAccount/Address'
@@ -38,7 +41,9 @@ function MyAccount() {
   const randerMenuContent = () => {
     switch (isMenu) {
       case 'account':
-        return session && <AccountDetails session={session} />
+        return (
+          session && <AccountDetails setIsMenu={setIsMenu} session={session} />
+        )
       case 'address':
         return session && <Address session={session} />
       case 'orders':
@@ -51,10 +56,10 @@ function MyAccount() {
   }
 
   return (
-    <div className="flex w-full px-20 py-8">
+    <div className="flex flex-col md:flex-row w-full px-0 md:px-20 py-8">
       <Card
         placeholder={undefined}
-        className="min-h-[40rem] w-full max-w-[20rem] p-4 border border-gray-200 shadow-none"
+        className="hidden md:block min-h-[40rem] w-full max-w-[20rem] p-4 border border-gray-200 shadow-none"
       >
         <div className="mb-2 p-4">
           <Typography placeholder={undefined} variant="h5" color="blue-gray">
@@ -123,6 +128,64 @@ function MyAccount() {
           </ListItem>
         </List>
       </Card>
+
+      <div className="flex md:hidden w-full order border-gray-200 bg-gray-400 text-sm h-8">
+        <ListItem
+          id="account"
+          placeholder={undefined}
+          onClick={(e: any) => {
+            setIsMenu(e.target.id)
+          }}
+          selected={isMenu === 'account'}
+          className={`w-full flex justify-center rounded-none`}
+        >
+          Account
+        </ListItem>
+        <ListItem
+          id="address"
+          placeholder={undefined}
+          onClick={(e: any) => {
+            setIsMenu(e.target.id)
+          }}
+          selected={isMenu === 'address'}
+          className={`w-full flex justify-center rounded-none`}
+        >
+          Address
+        </ListItem>
+        <ListItem
+          id="orders"
+          onClick={(e: any) => {
+            setIsMenu(e.target.id)
+          }}
+          placeholder={undefined}
+          selected={isMenu === 'orders'}
+          className={`w-full flex justify-center rounded-none`}
+        >
+          Orders
+        </ListItem>
+        <ListItem
+          id="wishlist"
+          onClick={(e: any) => {
+            setIsMenu(e.target.id)
+          }}
+          placeholder={undefined}
+          selected={isMenu === 'wishlist'}
+          className={`w-full flex justify-center rounded-none`}
+        >
+          WishList
+        </ListItem>
+        <ListItem
+          id="settings"
+          onClick={(e: any) => {
+            setIsMenu(e.target.id)
+          }}
+          placeholder={undefined}
+          selected={isMenu === 'settings'}
+          className={`w-full flex justify-center rounded-none`}
+        >
+          Settings
+        </ListItem>
+      </div>
 
       <div className="w-full p-4">{randerMenuContent()}</div>
     </div>

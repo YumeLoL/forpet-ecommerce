@@ -28,6 +28,7 @@ export const addressRouter = createTRPCRouter({
           userId,
         },
         select: defaultAddressSelect,
+        orderBy: { id: 'asc' },
       })
     }),
 
@@ -87,6 +88,7 @@ export const addressRouter = createTRPCRouter({
         where: {
           id,
         },
+
         data: {
           address,
           city,
@@ -115,6 +117,42 @@ export const addressRouter = createTRPCRouter({
 
       return {
         message: 'Address deleted',
+      }
+    }),
+
+  updateDefault: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        userId: z.string(),
+        isDefault: z.boolean(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const { id, userId, isDefault } = input
+
+      // update all addresses to false except the one we want
+      await ctx.prisma.address.updateMany({
+        where: {
+          userId,
+        },
+        data: {
+          isDefault: false,
+        },
+      })
+
+      // update the one we want to true
+      await ctx.prisma.address.update({
+        where: {
+          id,
+        },
+        data: {
+          isDefault: isDefault,
+        },
+      })
+
+      return {
+        message: 'Address updated',
       }
     }),
 })

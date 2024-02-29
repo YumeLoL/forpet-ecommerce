@@ -1,9 +1,10 @@
 import { api } from '@/utils/api'
 import React, { useState } from 'react'
 import { Session } from 'next-auth/core/types'
-import { Button } from '@material-tailwind/react'
+import { Button, Switch } from '@material-tailwind/react'
 import { Address } from '@prisma/client'
 import { useRouter } from 'next/navigation'
+import { XCircle } from 'lucide-react'
 
 type Props = {
   session: Session
@@ -32,6 +33,11 @@ export default function Address({ session }: Props) {
 
   const trpc = api.useUtils()
   const { mutate: createNew } = api.address.create.useMutation({
+    onSettled: async () => {
+      await trpc.address.all.invalidate()
+    },
+  })
+  const { mutate: update } = api.address.updateDefault.useMutation({
     onSettled: async () => {
       await trpc.address.all.invalidate()
     },
@@ -69,21 +75,41 @@ export default function Address({ session }: Props) {
           return (
             <>
               <div className="w-full flex justify-between" key={address.id}>
-                <p>
-                  {address.address}, {address.city}, {address.state}.{' '}
-                  {address.country} {address.zipCode}{' '}
-                </p>
-
-                <div className="flex gap-3">
+                <div className="flex gap-2">
                   <p
-                    className="ml-auto text-sm text-red-800 cursor-pointer font-bold"
+                    className="ml-auto text-sm text-red-800 cursor-pointer"
                     onClick={() =>
                       del({
                         id: address.id,
                       })
                     }
                   >
-                    Delete
+                    <XCircle />
+                  </p>
+
+                  <p>
+                    {address.address}, {address.city}, {address.state}.{' '}
+                    {address.country} {address.zipCode}{' '}
+                  </p>
+                </div>
+
+                <div className="flex gap-3">
+                  <p
+                    className="ml-auto text-sm text-red-800 cursor-pointer"
+                    onClick={() =>
+                      update({
+                        isDefault: !address.isDefault,
+                        id: address.id,
+                        userId: session?.user?.id as string,
+                      })
+                    }
+                  >
+                    <Switch
+                      color="teal"
+                      checked={address.isDefault}
+                      crossOrigin={undefined}
+                      label="Default"
+                    />
                   </p>
                 </div>
               </div>

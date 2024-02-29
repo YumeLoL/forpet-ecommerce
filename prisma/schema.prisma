@@ -109,6 +109,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   addresses     Address[]
+  Order         Order[]
 }
 
 model Address {
@@ -123,6 +124,23 @@ model Address {
   updatedAt DateTime @updatedAt
   User      User?    @relation(fields: [userId], references: [id])
   userId    String?
+  orderId   String?
+  Order     Order[]
+}
+
+model Order {
+  id             String         @id @default(cuid())
+  User           User?          @relation(fields: [userId], references: [id])
+  userId         String
+  Address        Address        @relation(fields: [addressId], references: [id])
+  addressId      String
+  orderStatus    OrderStatus
+  paymentStatus  PaymentStatus
+  deliveryStatus DeliveryStatus
+  items          Json[]
+  paymentAmount  Float
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 model VerificationToken {
@@ -131,6 +149,23 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum OrderStatus {
+  OPEN
+  COMPLETED
+}
+
+enum PaymentStatus {
+  UPAID
+  PAID
+}
+
+enum DeliveryStatus {
+  QUEUED
+  PREPARED
+  SHIPPING
+  DELIVERED
 }
 
 enum CollectionType {

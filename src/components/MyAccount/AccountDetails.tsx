@@ -7,9 +7,10 @@ import React, { useState } from 'react'
 
 type Props = {
   session: Session
+  setIsMenu: React.Dispatch<React.SetStateAction<string>>
 }
 
-export default function AccountDetails({ session }: Props) {
+export default function AccountDetails({ session, setIsMenu }: Props) {
   if (!session.user) return null
 
   const { data: addresses } = api.address.all.useQuery({
@@ -22,17 +23,17 @@ export default function AccountDetails({ session }: Props) {
       <hr className="my-4 border-gray-300 w-full" />
 
       <div className="w-full">
-        <div className="mb-4 flex gap-2">
+        <div className="mb-4 flex flex-col md:flex-row gap-2">
           <p className="font-bold">Account ID:</p>
           <p>{session?.user?.id}</p>
         </div>
 
-        <div className="mb-4 flex gap-2">
+        <div className="mb-4 flex flex-col md:flex-row gap-2">
           <p className="font-bold">Email:</p>
           <p>{session?.user?.email}</p>
         </div>
 
-        <div className="mb-4 flex gap-2">
+        <div className="mb-4 flex flex-col md:flex-row gap-2">
           <p className="font-bold">User Name:</p>
           <p>{session?.user?.name}</p>
         </div>
@@ -71,7 +72,7 @@ export default function AccountDetails({ session }: Props) {
             <p className="text-sm text-gray-500 mb-4">No shipping address</p>
             <Button
               className="w-fit"
-              onClick={() => {}}
+              onClick={() => setIsMenu('address')}
               size="sm"
               color="green"
               placeholder={undefined}
