@@ -109,7 +109,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   addresses     Address[]
-  Order         Order[]
+  order         Order[]
 }
 
 model Address {
@@ -124,18 +124,16 @@ model Address {
   updatedAt DateTime @updatedAt
   User      User?    @relation(fields: [userId], references: [id])
   userId    String?
-  orderId   String?
-  Order     Order[]
 }
 
 model Order {
   id             String         @id @default(cuid())
-  User           User?          @relation(fields: [userId], references: [id])
+  user           User?          @relation(fields: [userId], references: [id])
   userId         String
-  Address        Address        @relation(fields: [addressId], references: [id])
   addressId      String
   orderStatus    OrderStatus
-  paymentStatus  PaymentStatus
+  paymentStatus  String
+  paymentIntent  String?
   deliveryStatus DeliveryStatus
   items          Json[]
   paymentAmount  Float

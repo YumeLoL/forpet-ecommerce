@@ -146,10 +146,12 @@ function CartDrawer() {
                 <p>items: {productsData.length}</p>
                 <p className="">
                   $
-                  {productsData.reduce(
-                    (a: number, b: ProductProps) => a + b.price * b.quantity,
-                    0,
-                  )}
+                  {productsData
+                    .reduce(
+                      (a: number, b: ProductProps) => a + b.price * b.quantity,
+                      0,
+                    )
+                    .toFixed(2)}
                 </p>
               </div>
             </div>
