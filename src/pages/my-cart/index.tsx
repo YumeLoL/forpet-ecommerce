@@ -19,6 +19,9 @@ import { api } from '@/utils/api'
 import { Button, Checkbox } from '@material-tailwind/react'
 import { Circle } from 'lucide-react'
 import { createRouteLoader } from 'next/dist/client/route-loader'
+import Stripe from 'stripe'
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
 const promisePayment = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
@@ -32,7 +35,10 @@ const MyCart: NextPageWithLayout = () => {
   const dispatch = useDispatch()
   const router = useRouter()
 
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
+  if (status === 'unauthenticated') {
+    router.push('/signin')
+  }
 
   const trpc = api.useUtils()
   const { data: addresses } = api.address.all.useQuery({
@@ -43,37 +49,25 @@ const MyCart: NextPageWithLayout = () => {
       await trpc.address.all.invalidate()
     },
   })
-  const { mutate: makeOrder } = api.order.create.useMutation()
 
-  const handleCheckout = async () => {
-    const stripe = await promisePayment
-    const response = await fetch(`api/checkout`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        purchases: productsData,
-        email: session?.user?.email,
-      }),
+  const { mutate: stripeCheckout } =
+    api.checkout.createCheckoutSession.useMutation({
+      onSuccess: async (data) => {
+        const stripe = await promisePayment
+        stripe?.redirectToCheckout({
+          sessionId: data.session.id,
+        })
+      },
     })
 
-    const data = await response.json()
-
-    if (response.ok) {
-      stripe?.redirectToCheckout({ sessionId: data.id })
-
-      makeOrder({
-        userId: session?.user?.id as string,
-        addressId,
-        purchase: productsData,
-        paymentAmount: productsData
-          .reduce((a: number, b: ProductProps) => a + b.price * b.quantity, 0)
-          .toFixed(2),
+  const handleCheckout = () => {
+    session &&
+      session.user &&
+      stripeCheckout({
+        purchases: productsData,
+        email: session.user.email as string,
+        userId: session.user.id as string,
       })
-
-      dispatch(clearCart())
-    } else {
-      throw new Error('Faild to complate payment process')
-    }
   }
 
   return (

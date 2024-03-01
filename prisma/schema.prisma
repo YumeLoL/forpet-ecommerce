@@ -130,12 +130,12 @@ model Order {
   id             String         @id @default(cuid())
   user           User?          @relation(fields: [userId], references: [id])
   userId         String
+  sessionId      String
   addressId      String
   orderStatus    OrderStatus
   paymentStatus  String
-  paymentIntent  String?
+  paymentIntent  String         @unique
   deliveryStatus DeliveryStatus
-  items          Json[]
   paymentAmount  Float
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt

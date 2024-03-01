@@ -3,13 +3,14 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import Stripe from 'stripe'
 import getConfig from 'next/config'
 
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+
 const { publicRuntimeConfig } = getConfig()
-export default async function handler(
+
+export async function createCheckoutSession(
   request: NextApiRequest,
   response: NextApiResponse,
 ) {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
-
   if (request.method === 'POST' && request.body) {
     try {
       const { purchases, email } = request.body
@@ -36,9 +37,31 @@ export default async function handler(
         metadata: { email },
       })
 
-      return response.status(200).json({ id: session.id })
+      return response.status(200).json({
+        session,
+      })
     } catch (error: any) {
       console.error(error)
     }
+  }
+}
+
+export async function getSession(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === 'POST' && req.body && req.body.session_id) {
+    const { session_id } = req.body
+
+    try {
+      const session = await stripe.checkout.sessions.retrieve(session_id, {
+        expand: ['line_items'],
+      })
+      res.status(200).json({ session })
+    } catch (error) {
+      console.error('Error storing payment information:', error)
+      res.status(500).json({ error: 'Failed to store payment information' })
+    }
+  } else {
+    res
+      .status(400)
+      .json({ error: 'Invalid request method or missing session ID' })
   }
 }
