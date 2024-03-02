@@ -3,8 +3,6 @@ import { DeliveryStatus, OrderStatus, Prisma } from '@prisma/client'
 import { publicProcedure, createTRPCRouter } from '../trpc'
 import Stripe from 'stripe'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
-
 export const defaultOrderSelect = Prisma.validator<Prisma.OrderSelect>()({
   id: true,
   sessionId: true,

@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
-import { useState, ReactElement, useMemo, useEffect } from 'react'
+import { useState, ReactElement } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import { Minus, Plus, Trash2, X } from 'lucide-react'
@@ -16,10 +16,7 @@ import {
   removeFromCart,
 } from '@/redux/slices'
 import { api } from '@/utils/api'
-import { Button, Checkbox, Option, Select } from '@material-tailwind/react'
-import Stripe from 'stripe'
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+import { Button } from '@material-tailwind/react'
 
 const promisePayment = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
@@ -31,7 +28,6 @@ const MyCart: NextPageWithLayout = () => {
   const dispatch = useDispatch()
   const router = useRouter()
 
-  const trpc = api.useUtils()
   const { data: session, status } = useSession()
   if (status === 'unauthenticated') {
     router.push('/signin')
@@ -64,7 +60,14 @@ const MyCart: NextPageWithLayout = () => {
       },
     })
 
-  const [selectedAddress, setSelectedAddress] = useState<string>()
+  const defaultAddress =
+    addresses && addresses.find((address) => address.isDefault)
+  const addressDetail =
+    defaultAddress &&
+    `${defaultAddress.address}, ${defaultAddress.city}, ${defaultAddress.state}, ${defaultAddress.country}. ${defaultAddress.zipCode}`
+  const [selectedAddress, setSelectedAddress] = useState<string>(
+    addressDetail || '',
+  )
 
   const handleCheckout = () => {
     if (selectedAddress === undefined) {
@@ -219,13 +222,14 @@ const MyCart: NextPageWithLayout = () => {
                       }}
                       id="underline_select"
                       className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+                      defaultValue={selectedAddress}
                     >
                       {addresses.map((address) => {
                         return (
                           <option
                             key={address.id}
                             value={`${address.address}, ${address.city}, ${address.state}, ${address.country}. ${address.zipCode}`}
-                            selected={address.isDefault}
+                            // selected={address.isDefault}
                           >
                             {`${address.address}, ${address.city}, ${address.state}, ${address.country}. ${address.zipCode}`}
                           </option>
