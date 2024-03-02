@@ -128,15 +128,16 @@ model Address {
 
 model Order {
   id             String         @id @default(cuid())
+  sessionId      String
   user           User?          @relation(fields: [userId], references: [id])
   userId         String
-  sessionId      String
-  addressId      String
+  address        String
   orderStatus    OrderStatus
+  items          String
   paymentStatus  String
-  paymentIntent  String         @unique
+  paymentIntent  String
   deliveryStatus DeliveryStatus
-  paymentAmount  Float
+  paymentAmount  Float          @default(0)
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 }

@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
-import { useState, useEffect, ReactElement } from 'react'
+import { useState, ReactElement, useMemo, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import { Minus, Plus, Trash2, X } from 'lucide-react'
@@ -16,9 +16,7 @@ import {
   removeFromCart,
 } from '@/redux/slices'
 import { api } from '@/utils/api'
-import { Button, Checkbox } from '@material-tailwind/react'
-import { Circle } from 'lucide-react'
-import { createRouteLoader } from 'next/dist/client/route-loader'
+import { Button, Checkbox, Option, Select } from '@material-tailwind/react'
 import Stripe from 'stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
@@ -30,44 +28,63 @@ const MyCart: NextPageWithLayout = () => {
   const { productsData } = useSelector(
     (state: SelectorStateProps | any) => state.combine.cart,
   )
-  const [addressId, setAddressId] = useState('')
-
   const dispatch = useDispatch()
   const router = useRouter()
 
+  const trpc = api.useUtils()
   const { data: session, status } = useSession()
   if (status === 'unauthenticated') {
     router.push('/signin')
   }
-
-  const trpc = api.useUtils()
   const { data: addresses } = api.address.all.useQuery({
     userId: session?.user?.id as string,
   })
-  const { mutate: update } = api.address.updateDefault.useMutation({
-    onSettled: async () => {
-      await trpc.address.all.invalidate()
+  const { mutate: createOrder } = api.order.create.useMutation({
+    onSuccess: async (data) => {
+      console.log('ckeck create order data', data)
+      const stripe = await promisePayment
+      stripe?.redirectToCheckout({
+        sessionId: data.sessionId,
+      })
     },
   })
-
   const { mutate: stripeCheckout } =
     api.checkout.createCheckoutSession.useMutation({
       onSuccess: async (data) => {
-        const stripe = await promisePayment
-        stripe?.redirectToCheckout({
+        console.log('create checkout session', data)
+        createOrder({
           sessionId: data.session.id,
+          userId: session?.user?.id as string,
+          address: selectedAddress as string,
+          paymentAmount: data.session.amount_total as number,
+          paymentStatus: data.session.payment_status as string,
+          paymentIntent: '',
+          items: JSON.stringify(productsData),
         })
       },
     })
 
+  const [selectedAddress, setSelectedAddress] = useState<string>()
+
   const handleCheckout = () => {
-    session &&
+    if (selectedAddress === undefined) {
+      alert('Please select address')
+    }
+    if (
+      session &&
       session.user &&
+      productsData &&
+      selectedAddress !== undefined
+    ) {
       stripeCheckout({
         purchases: productsData,
         email: session.user.email as string,
-        userId: session.user.id as string,
+        userId: session.user.id,
+        address: selectedAddress as string,
       })
+    } else {
+      console.error('Missing session, user, productsData, or addressId')
+    }
   }
 
   return (
@@ -96,7 +113,10 @@ const MyCart: NextPageWithLayout = () => {
                 </thead>
                 {productsData.map((item: ProductProps) => {
                   return (
-                    <tbody key={item?.id} className=" min-w-[300px]">
+                    <tbody
+                      key={item?.id + item.size.id + item.slug}
+                      className=" min-w-[300px]"
+                    >
                       <tr className="bg-white border-b-[1px] border-b-zinc-300 max-lg:flex flex-wrap items-center">
                         <th
                           scope="row"
@@ -189,39 +209,32 @@ const MyCart: NextPageWithLayout = () => {
                 </p>
               </div>
 
-              {addresses &&
-                addresses.length > 0 &&
-                addresses?.map((address) => {
-                  return (
-                    <>
-                      <div
-                        className="w-full items-center flex gap-4"
-                        key={address.id}
-                        onClick={() => {
-                          update({
-                            isDefault: !address.isDefault,
-                            id: address.id,
-                            userId: session?.user?.id as string,
-                          })
-                          setAddressId(address.id)
-                        }}
-                      >
-                        <div
-                          className={`${address.isDefault ? 'bg-green-400' : 'bg-white'} border-2 cursor-pointer border-gray-800   overflow-hidden rounded-full w-4 h-4`}
-                        />
-
-                        <p>
-                          {address.address}, {address.city}, {address.state}.{' '}
-                          {address.country}. {address.zipCode}{' '}
-                        </p>
-                        <p className="text-sm italic text-gray-500">
-                          {' '}
-                          {address.isDefault && 'default'}
-                        </p>
-                      </div>
-                    </>
-                  )
-                })}
+              {addresses && addresses.length > 0 && (
+                <>
+                  <form className="w-full mx-auto">
+                    <select
+                      onChange={(e) => {
+                        const selectedValue = e.target.value
+                        setSelectedAddress(selectedValue)
+                      }}
+                      id="underline_select"
+                      className="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer"
+                    >
+                      {addresses.map((address) => {
+                        return (
+                          <option
+                            key={address.id}
+                            value={`${address.address}, ${address.city}, ${address.state}, ${address.country}. ${address.zipCode}`}
+                            selected={address.isDefault}
+                          >
+                            {`${address.address}, ${address.city}, ${address.state}, ${address.country}. ${address.zipCode}`}
+                          </option>
+                        )
+                      })}
+                    </select>
+                  </form>
+                </>
+              )}
 
               {!addresses ||
                 (addresses.length === 0 && (
