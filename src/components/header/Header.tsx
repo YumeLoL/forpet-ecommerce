@@ -56,11 +56,11 @@ export const Header = ({ collections }: { collections: Collections }) => {
             <ul className="ml-auto hidden h-full sm:flex ">
               {navLinks.map((item, index) => (
                 <li
-                  className={`py-2 font-medium transition-colors ${
+                  className={`py-2 font-medium transition-colors text-green-700 ${
                     hoveredNavLink === item
                       ? 'bg-white text-green-700'
                       : 'text-white'
-                  } ${index === 0 && 'bg-yellow-900 text-white'}`}
+                  } ${index === 0 && 'bg-yellow-600 text-green-700'}`}
                   key={index}
                   onMouseEnter={() => handleShowMenu(item)}
                   onMouseLeave={handleCloseMenu}

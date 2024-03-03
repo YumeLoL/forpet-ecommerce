@@ -101,7 +101,7 @@ const MyCart: NextPageWithLayout = () => {
                   key={item.id}
                   className="flex flex-col sm:flex-row justify-center w-full h-full border-b-[1px] border-b-zinc-300  flex-wrap items-center"
                 >
-                  <div className="sm:w-3/5 w-full px-6 py-4 h-fit justify-center align-middle flex items-center gap-3">
+                  <div className="sm:w-3/5 w-full px-2 py-4 md:px-6 h-fit justify-center align-middle flex items-center gap-3">
                     <Image
                       src={item?.image}
                       alt="proudct image"
@@ -114,12 +114,12 @@ const MyCart: NextPageWithLayout = () => {
                         {item?.brand.toUpperCase()} {item?.name}
                       </p>
                       <p className="text-sm font-normal text-gray-600">
-                        {item?.size?.size}, ${item?.price}
+                        {item?.size?.size}, ${item?.price.toFixed(2)}
                       </p>
                     </div>
                   </div>
-                  <div className="sm:w-2/5  w-full px-6 py-4 ">
-                    <div className="flex justify-between items-center gap-3">
+                  <div className="sm:w-2/5  w-full px-2 py-4 md:px-6">
+                    <div className="flex justify-between items-center gap-2">
                       <div className="border border-gray-300 p-1 rounded-md">
                         <span
                           onClick={() =>
@@ -127,9 +127,9 @@ const MyCart: NextPageWithLayout = () => {
                           }
                           className="bg-gray-200 p-2 rounded-md cursor-pointer duration-200 inline-flex items-center justify-center"
                         >
-                          <Minus className="w-4 h-4" />
+                          <Minus className="w-3 h-3" />
                         </span>
-                        <span className="font-semibold mx-4">
+                        <span className="font-semibold mx-2">
                           {item?.quantity}
                         </span>
                         <span
@@ -138,11 +138,14 @@ const MyCart: NextPageWithLayout = () => {
                           }}
                           className="bg-gray-200 p-2 rounded-md cursor-pointer duration-200 inline-flex items-center justify-center"
                         >
-                          <Plus className="w-4 h-4" />
+                          <Plus className="w-3 h-3" />
                         </span>
                       </div>
 
-                      <p className=""> ${item?.price * item?.quantity}</p>
+                      <p className="">
+                        {' '}
+                        ${(item?.price * item?.quantity).toFixed(2)}
+                      </p>
 
                       <Trash2
                         onClick={() => dispatch(removeFromCart(item))}
