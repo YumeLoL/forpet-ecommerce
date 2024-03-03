@@ -2,17 +2,16 @@ import { z } from 'zod'
 import { DeliveryStatus, OrderStatus, Prisma } from '@prisma/client'
 import { publicProcedure, createTRPCRouter } from '../trpc'
 import Stripe from 'stripe'
-import { loadStripe } from '@stripe/stripe-js'
 
 export const defaultOrderSelect = Prisma.validator<Prisma.OrderSelect>()({
   id: true,
+  sessionId: true,
   userId: true,
-  addressId: true,
+  address: true,
   orderStatus: true,
   paymentStatus: true,
   paymentIntent: true,
   deliveryStatus: true,
-  items: true,
   paymentAmount: true,
   createdAt: true,
   updatedAt: true,
@@ -32,34 +31,102 @@ export const orderRouter = createTRPCRouter({
         where: {
           userId,
         },
-        orderBy: { id: 'desc' },
+        orderBy: { updatedAt: 'desc' },
         select: defaultOrderSelect,
       })
     }),
   create: publicProcedure
     .input(
       z.object({
+        sessionId: z.string(),
         userId: z.string(),
-        addressId: z.string(),
-        purchase: z.array(z.any()),
+        address: z.string(),
         paymentAmount: z.number(),
+        paymentStatus: z.string(),
+        paymentIntent: z.string(),
+        items: z.string(),
+        orderStatus: z.nativeEnum(OrderStatus).optional(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      const { userId, addressId, purchase, paymentAmount } = input
+      const {
+        sessionId,
+        userId,
+        address,
+        paymentAmount,
+        paymentStatus,
+        paymentIntent,
+        items,
+      } = input
 
-      await ctx.prisma.order.create({
+      return await ctx.prisma.order.create({
         data: {
           user: {
             connect: { id: userId },
           },
-          addressId,
+          address,
+          sessionId,
           orderStatus: OrderStatus.OPEN,
-          paymentStatus: 'PENDING',
-          paymentIntent: 'xxxxxxxxllll',
           deliveryStatus: DeliveryStatus.QUEUED,
-          items: ['xx'],
           paymentAmount,
+          paymentStatus,
+          paymentIntent,
+          items,
+        },
+      })
+    }),
+
+  update: publicProcedure
+    .input(
+      z.object({
+        id: z.string().optional(),
+        userId: z.string().optional(),
+        sessionId: z.string(),
+        orderStatus: z.nativeEnum(OrderStatus).optional(),
+        deliveryStatus: z.nativeEnum(DeliveryStatus).optional(),
+        paymentAmount: z.number().optional(),
+        paymentStatus: z.string().optional(),
+        paymentIntent: z.string().optional(),
+        items: z.string().optional(),
+        address: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const {
+        id,
+        userId,
+        sessionId,
+        orderStatus,
+        deliveryStatus,
+        paymentAmount,
+        paymentStatus,
+        paymentIntent,
+        items,
+        address,
+      } = input
+
+      // Check if the order with the specified session ID exists
+      const existingOrder = await ctx.prisma.order.findFirst({
+        where: { sessionId },
+      })
+
+      if (!existingOrder) {
+        throw new Error(`Order with sessionId ${sessionId} not found.`)
+      }
+
+      return await ctx.prisma.order.update({
+        where: {
+          id: existingOrder.id,
+        },
+        data: {
+          sessionId,
+          orderStatus,
+          deliveryStatus,
+          paymentAmount,
+          paymentStatus,
+          paymentIntent,
+          items,
+          address,
         },
       })
     }),

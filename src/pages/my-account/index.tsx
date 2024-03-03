@@ -8,12 +8,11 @@ import {
   ListItem,
   ListItemSuffix,
   Chip,
-  Tabs,
-  TabsHeader,
-  Tab,
 } from '@material-tailwind/react'
 import AccountDetails from '@/components/MyAccount/AccountDetails'
 import Address from '@/components/MyAccount/Address'
+import Orders from './Orders'
+import CustomList from '@/components/ui/CustomList'
 
 function MyAccount() {
   const { data: session, status } = useSession()
@@ -47,7 +46,7 @@ function MyAccount() {
       case 'address':
         return session && <Address session={session} />
       case 'orders':
-        return <div>Orders</div>
+        return <Orders />
       case 'wishlist':
         return <div>WishList</div>
       case 'settings':
@@ -55,139 +54,53 @@ function MyAccount() {
     }
   }
 
+  const SideBarMenu = [
+    {
+      id: 'account',
+      placeholder: 'Account',
+    },
+    {
+      id: 'address',
+      placeholder: 'Address',
+    },
+    {
+      id: 'orders',
+      placeholder: 'Orders',
+    },
+    {
+      id: 'wishlist',
+      placeholder: 'WishList',
+    },
+    {
+      id: 'settings',
+      placeholder: 'Settings',
+    },
+  ]
+
   return (
-    <div className="flex flex-col md:flex-row w-full px-0 md:px-20 py-8">
-      <Card
-        placeholder={undefined}
-        className="hidden md:block min-h-[40rem] w-full max-w-[20rem] p-4 border border-gray-200 shadow-none"
-      >
-        <div className="mb-2 p-4">
-          <Typography placeholder={undefined} variant="h5" color="blue-gray">
-            Account
-          </Typography>
+    <div className="w-full px-0 md:px-20 py-8">
+      <h1 className="text-xl text-green-800 font-bold mb-4 mx-4">
+        Welcome back, {session?.user?.name}
+      </h1>
+      <div className="flex flex-col md:flex-row w-full ">
+        <div className="">
+          <div className="min-w-[200px] flex md:flex-col flex-row gap-1 mx-4">
+            {SideBarMenu.map((item) => {
+              return (
+                <CustomList
+                  key={item.id}
+                  id={item.id}
+                  placeholder={item.placeholder}
+                  isMenu={isMenu}
+                  setIsMenu={setIsMenu}
+                />
+              )
+            })}
+          </div>
         </div>
-        <List placeholder={undefined} className="text-black">
-          <ListItem
-            id="account"
-            placeholder={undefined}
-            onClick={(e: any) => {
-              setIsMenu(e.target.id)
-            }}
-            selected={isMenu === 'account'}
-          >
-            Account Details
-          </ListItem>
-          <ListItem
-            id="address"
-            placeholder={undefined}
-            onClick={(e: any) => {
-              setIsMenu(e.target.id)
-            }}
-            selected={isMenu === 'address'}
-          >
-            Address
-          </ListItem>
-          <ListItem
-            id="orders"
-            onClick={(e: any) => {
-              setIsMenu(e.target.id)
-            }}
-            placeholder={undefined}
-            selected={isMenu === 'orders'}
-          >
-            Orders
-            <ListItemSuffix placeholder={undefined}>
-              <Chip
-                value="14"
-                size="sm"
-                variant="ghost"
-                color="blue-gray"
-                className="rounded-full"
-              />
-            </ListItemSuffix>
-          </ListItem>
-          <ListItem
-            id="wishlist"
-            onClick={(e: any) => {
-              setIsMenu(e.target.id)
-            }}
-            placeholder={undefined}
-            selected={isMenu === 'wishlist'}
-          >
-            WishList
-          </ListItem>
-          <ListItem
-            id="settings"
-            onClick={(e: any) => {
-              setIsMenu(e.target.id)
-            }}
-            placeholder={undefined}
-            selected={isMenu === 'settings'}
-          >
-            Settings
-          </ListItem>
-        </List>
-      </Card>
 
-      <div className="flex md:hidden w-full order border-gray-200 bg-gray-400 text-sm h-8">
-        <ListItem
-          id="account"
-          placeholder={undefined}
-          onClick={(e: any) => {
-            setIsMenu(e.target.id)
-          }}
-          selected={isMenu === 'account'}
-          className={`w-full flex justify-center rounded-none`}
-        >
-          Account
-        </ListItem>
-        <ListItem
-          id="address"
-          placeholder={undefined}
-          onClick={(e: any) => {
-            setIsMenu(e.target.id)
-          }}
-          selected={isMenu === 'address'}
-          className={`w-full flex justify-center rounded-none`}
-        >
-          Address
-        </ListItem>
-        <ListItem
-          id="orders"
-          onClick={(e: any) => {
-            setIsMenu(e.target.id)
-          }}
-          placeholder={undefined}
-          selected={isMenu === 'orders'}
-          className={`w-full flex justify-center rounded-none`}
-        >
-          Orders
-        </ListItem>
-        <ListItem
-          id="wishlist"
-          onClick={(e: any) => {
-            setIsMenu(e.target.id)
-          }}
-          placeholder={undefined}
-          selected={isMenu === 'wishlist'}
-          className={`w-full flex justify-center rounded-none`}
-        >
-          WishList
-        </ListItem>
-        <ListItem
-          id="settings"
-          onClick={(e: any) => {
-            setIsMenu(e.target.id)
-          }}
-          placeholder={undefined}
-          selected={isMenu === 'settings'}
-          className={`w-full flex justify-center rounded-none`}
-        >
-          Settings
-        </ListItem>
+        <div className="w-full p-4">{randerMenuContent()}</div>
       </div>
-
-      <div className="w-full p-4">{randerMenuContent()}</div>
     </div>
   )
 }

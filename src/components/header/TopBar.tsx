@@ -24,36 +24,26 @@ export const TopBar = () => {
 
         <ul className="hidden sm:flex flex-wrap gap-3 justify-center md:ml-auto ">
           {session && (
-            <Menu>
-              <MenuHandler>
-                <div className="flex items-center cursor-pointer">
-                  <div className="hidden rounded-full border border-solid border-violet-700 p-[2px] md:block">
-                    {session.user?.image && (
-                      <Image
-                        src={session.user.image}
-                        alt="user profile image"
-                        width={20}
-                        height={20}
-                        className="overflow-hidden rounded-full"
-                        quality={100}
-                      />
-                    )}
-                  </div>
-                  <span className="ml-1 hover:text-white">
-                    Hi, {session.user?.name}
-                  </span>
-                </div>
-              </MenuHandler>
-              <MenuList placeholder={undefined}>
-                <MenuItem placeholder={undefined}>Profile</MenuItem>
-                <MenuItem placeholder={undefined}>Address</MenuItem>
-                <MenuItem placeholder={undefined}>Orders</MenuItem>
-                <hr className="my-3" />
-                <MenuItem onClick={() => signOut()} placeholder={undefined}>
-                  Sign Out
-                </MenuItem>
-              </MenuList>
-            </Menu>
+            <Link
+              className="flex items-center cursor-pointer"
+              href={'/my-account'}
+            >
+              <div className="hidden rounded-full border border-solid border-violet-700 p-[2px] md:block">
+                {session.user?.image && (
+                  <Image
+                    src={session.user.image}
+                    alt="user profile image"
+                    width={20}
+                    height={20}
+                    className="overflow-hidden rounded-full"
+                    quality={100}
+                  />
+                )}
+              </div>
+              <span className="ml-1 hover:text-white">
+                Hi, {session.user?.name}
+              </span>
+            </Link>
           )}
 
           {!session && (

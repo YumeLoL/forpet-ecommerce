@@ -15,7 +15,6 @@ import { useSession } from 'next-auth/react'
 
 function CartDrawer() {
   const { data: session, status } = useSession()
-  console.log('session')
 
   const router = useRouter()
   const dispatch = useDispatch()
