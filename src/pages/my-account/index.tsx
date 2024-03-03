@@ -1,40 +1,23 @@
 import { PrimaryLayout } from '@/layouts'
 import { useSession } from 'next-auth/react'
 import React, { ReactElement, useState } from 'react'
-import {
-  Card,
-  Typography,
-  List,
-  ListItem,
-  ListItemSuffix,
-  Chip,
-} from '@material-tailwind/react'
 import AccountDetails from '@/components/MyAccount/AccountDetails'
 import Address from '@/components/MyAccount/Address'
-import Orders from './Orders'
+import Orders from '../../components/MyAccount/Orders'
 import CustomList from '@/components/ui/CustomList'
+import { useRouter } from 'next/router'
+import { api } from '@/utils/api'
 
 function MyAccount() {
+  const navigate = useRouter()
   const { data: session, status } = useSession()
   const [isMenu, setIsMenu] = useState('account')
+  const { data: allOrders } = api.order.all.useQuery({
+    userId: session?.user?.id as string,
+  })
 
-  if (status === 'loading') {
-    return (
-      <div className="flex w-full h-[40rem] justify-center align-middle items-center">
-        <div
-          className="inline-block h-12 w-12 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-          role="status"
-        >
-          <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
-            Loading...
-          </span>
-        </div>
-      </div>
-    )
-  }
-
-  if (status === 'unauthenticated' || !session) {
-    return <div>unauthenticated, please login now</div>
+  if (status === 'unauthenticated') {
+    navigate.push('/signin')
   }
 
   const randerMenuContent = () => {
@@ -46,7 +29,9 @@ function MyAccount() {
       case 'address':
         return session && <Address session={session} />
       case 'orders':
-        return <Orders />
+        return (
+          allOrders && allOrders.length > 0 && <Orders allOrders={allOrders} />
+        )
       case 'wishlist':
         return <div>WishList</div>
       case 'settings':
@@ -82,21 +67,20 @@ function MyAccount() {
       <h1 className="text-xl text-green-800 font-bold mb-4 mx-4">
         Welcome back, {session?.user?.name}
       </h1>
-      <div className="flex flex-col md:flex-row w-full ">
-        <div className="">
-          <div className="min-w-[200px] flex md:flex-col flex-row gap-1 mx-4">
-            {SideBarMenu.map((item) => {
-              return (
-                <CustomList
-                  key={item.id}
-                  id={item.id}
-                  placeholder={item.placeholder}
-                  isMenu={isMenu}
-                  setIsMenu={setIsMenu}
-                />
-              )
-            })}
-          </div>
+      <div className="flex flex-col md:flex-row w-full">
+        <div className="min-w-[200px] flex md:flex-col flex-row gap-1 m-4">
+          {SideBarMenu.map((item) => {
+            return (
+              <CustomList
+                key={item.id}
+                id={item.id}
+                placeholder={item.placeholder}
+                isMenu={isMenu}
+                setIsMenu={setIsMenu}
+                account={allOrders?.length || 0}
+              />
+            )
+          })}
         </div>
 
         <div className="w-full p-4">{randerMenuContent()}</div>
@@ -109,7 +93,7 @@ MyAccount.getLayout = function getLayout(page: ReactElement) {
   return (
     <PrimaryLayout
       seo={{
-        title: 'My Account | ForPETS Store',
+        title: 'My Account',
         description: 'My Account | ForPETS Store',
         // canonical: 'https://karashop.vercel.app/products',
       }}

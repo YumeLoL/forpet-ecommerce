@@ -8,6 +8,7 @@ export const defaultOrderSelect = Prisma.validator<Prisma.OrderSelect>()({
   sessionId: true,
   userId: true,
   address: true,
+  items: true,
   orderStatus: true,
   paymentStatus: true,
   paymentIntent: true,
