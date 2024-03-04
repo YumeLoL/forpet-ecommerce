@@ -188,8 +188,8 @@ export const ProductItem = (product: Product) => {
           <Button
             variant="gradient"
             size={'sm'}
-            color={'orange'}
-            className="flex justify-center items-center gap-3"
+            color={'yellow'}
+            className="flex justify-center items-center gap-3 hover:shadow-none"
             placeholder={undefined}
             onClick={() => {
               dispatch(addToCart(currentProduct))

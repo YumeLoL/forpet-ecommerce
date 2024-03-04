@@ -69,7 +69,7 @@ export const NewProducts = ({
             href="/products/cat?page=1"
           >
             <ChevronsRight fontWeight={'bold'} />
-            <p className="text-md md:text-xl "> View All Cat&apos;s Products</p>
+            <p className="text-sm md:text-md "> View All Cat&apos;s Products</p>
           </Link>
 
           <div className="w-full flex justify-center">
@@ -102,7 +102,7 @@ export const NewProducts = ({
             href="/products/dog?page=1"
           >
             <ChevronsRight fontWeight={'bold'} />
-            <p className="text-md md:text-xl "> View All Dog&apos;s Products</p>
+            <p className="text-sm md:text-md "> View All Dog&apos;s Products</p>
           </Link>
 
           <div className="w-full flex justify-center">
