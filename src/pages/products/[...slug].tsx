@@ -1,6 +1,6 @@
 import type { GetStaticPathsResult, GetStaticProps } from 'next'
 import type { NextPageWithLayout } from '../_app'
-import { ReactElement, useEffect, useMemo } from 'react'
+import { ReactElement, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { Navigation, ProductsList } from '@/components'
@@ -8,7 +8,8 @@ import { Pagination } from '@/components/ui'
 import { PrimaryLayout } from '@/layouts'
 import { CollectionType } from '@prisma/client'
 import { api } from '@/utils/api'
-// import { ProductItem, Skeleton } from '@/components/product/ProductItem'
+import { SlidersHorizontal } from 'lucide-react'
+import { drawer } from '@material-tailwind/react'
 
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
@@ -77,12 +78,20 @@ const Products: NextPageWithLayout = () => {
     }
   }, [data, page, isPreviousData, queryInput, utils])
 
+  const [openBottom, setOpenBottom] = useState(false)
   return (
     <div className="mx-auto items-center p-4 xl:container">
+      <div className="w-full flex md:hidden justify-end">
+        <SlidersHorizontal
+          className="rounded-md m-2 bg-green-200 text-white p-1 shadow cursor-pointer
+          "
+          onClick={() => setOpenBottom(true)}
+          size="30"
+        />
+      </div>
+
       <div className="flex gap-5">
-        <div className="hidden flex-1 md:block">
-          <Navigation />
-        </div>
+        <Navigation openBottom={openBottom} setOpenBottom={setOpenBottom} />
         <div className="flex-[5]">
           {data?.products.length === 0 && data.totalCount === 0 && (
             <div className="text-center">
