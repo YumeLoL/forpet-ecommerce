@@ -258,7 +258,7 @@ MyCart.getLayout = function getLayout(page: ReactElement) {
       seo={{
         title: 'Checkout | ForPETS Store',
         description: 'Checkout',
-        // canonical: 'https://karashop.vercel.app/products',
+        canonical: 'https://forpet-ecommerce.vercel.app/',
       }}
     >
       {page}

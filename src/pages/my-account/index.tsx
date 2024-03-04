@@ -96,7 +96,7 @@ MyAccount.getLayout = function getLayout(page: ReactElement) {
       seo={{
         title: 'My Account',
         description: 'My Account | ForPETS Store',
-        // canonical: 'https://karashop.vercel.app/products',
+        canonical: 'https://forpet-ecommerce.vercel.app',
       }}
     >
       {page}

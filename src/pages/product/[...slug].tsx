@@ -34,7 +34,7 @@ ProductDetail.getLayout = function getLayout(page: ReactElement) {
       seo={{
         title: 'Products',
         description: 'Products',
-        // canonical: 'https://karashop.vercel.app/products',
+        canonical: 'https://forpet-ecommerce.vercel.app/products',
       }}
     >
       {page}

@@ -60,7 +60,6 @@ SuccessPage.getLayout = function getLayout(page: ReactElement) {
       seo={{
         title: 'Payment Success',
         description: 'Payment Success',
-        // canonical: 'https://karashop.vercel.app/products',
       }}
     >
       {page}

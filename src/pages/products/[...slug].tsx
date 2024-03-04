@@ -9,7 +9,6 @@ import { PrimaryLayout } from '@/layouts'
 import { CollectionType } from '@prisma/client'
 import { api } from '@/utils/api'
 import { SlidersHorizontal } from 'lucide-react'
-import { drawer } from '@material-tailwind/react'
 
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
@@ -28,7 +27,7 @@ export function getStaticPaths(): GetStaticPathsResult {
 
 const Products: NextPageWithLayout = () => {
   const router = useRouter()
-  const utils = api.useContext()
+  const utils = api.useUtils()
 
   const {
     slug,
@@ -125,7 +124,7 @@ Products.getLayout = function getLayout(page: ReactElement) {
       seo={{
         title: 'Products',
         description: 'Products',
-        // canonical: 'https://karashop.vercel.app/products',
+        canonical: 'https://forpet-ecommerce.vercel.app/products',
       }}
     >
       {page}
