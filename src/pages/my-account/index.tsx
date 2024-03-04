@@ -7,6 +7,7 @@ import Orders from '../../components/MyAccount/Orders'
 import CustomList from '@/components/ui/CustomList'
 import { useRouter } from 'next/router'
 import { api } from '@/utils/api'
+import Setting from '@/components/MyAccount/Setting'
 
 function MyAccount() {
   const navigate = useRouter()
@@ -35,7 +36,7 @@ function MyAccount() {
       case 'wishlist':
         return <div>WishList</div>
       case 'settings':
-        return <div>Settings</div>
+        return <Setting />
     }
   }
 

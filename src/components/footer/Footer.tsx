@@ -100,7 +100,7 @@ export const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="bg-neutral-100">
+      <div className="">
         <div className="mx-auto max-w-7xl px-2 py-3">
           <div className="flex flex-col items-center justify-between gap-3 text-xs font-medium text-neutral-700 md:flex-row">
             <p>Copyright 2024 FOR PETS</p>
