@@ -15,7 +15,7 @@ const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:
 
 export const Skeleton = () => {
   return (
-    <div className="rounded-2xl bg-white p-2">
+    <div className="rounded-2xl bg-white p-2 ">
       <div className={`h-[350px] rounded-2xl bg-neutral-200 ${shimmer}`} />
       <div className="my-3 space-y-3 px-1">
         <div className="flex gap-2">
@@ -83,9 +83,9 @@ export const ProductItem = (product: Product) => {
   return (
     <div className="h-[470px] flex flex-col justify-between group rounded-lg border border-gray-300 p-2">
       <div className="flex flex-col gap-1 justify-between">
-        <div className="flex items-center h-[230px] max-w-[230px] overflow-hidden transition">
+        <div className="flex self-center w-full h-[230px] max-w-[230px] overflow-hidden transition ">
           <Link href={productLink} className="h-full w-full">
-            <div className="relative block h-full w-full">
+            <div className="relative h-full w-full">
               {images.map(({ imageURL, imageBlur }) => (
                 <Image
                   key={imageURL}
@@ -124,14 +124,14 @@ export const ProductItem = (product: Product) => {
           ))}
         </div>
 
-        <div className="flex flex-col gap-1">
+        <Link href={productLink} className="flex flex-col gap-1">
           <h2 className="text-base font-medium">
             <strong>{merchant?.brandName.toUpperCase()}</strong> {name}
           </h2>
           <h3 className="text-xs font-normal capitalize text-neutral-400">
             {collection.name}
           </h3>
-        </div>
+        </Link>
       </div>
 
       <div className=" flex flex-col items-left justify-between gap-2">
