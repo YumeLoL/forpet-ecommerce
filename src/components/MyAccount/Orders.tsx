@@ -97,7 +97,7 @@ export default function Orders({ allOrders }: { allOrders: Order[] }) {
                         className="font-medium cursor-auto w-fit text-sm"
                         placeholder={paymentAmount}
                       >
-                        ${paymentAmount.toFixed(2)}
+                        ${(paymentAmount / 100).toFixed(2)}
                       </Typography>
                       <span
                         className={`w-fit text-sm capitalize ${paymentStatus === 'unpaid' ? 'text-red-500' : 'text-teal-500'}`}
