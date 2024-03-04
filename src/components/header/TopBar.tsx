@@ -1,11 +1,10 @@
 import Link from 'next/link'
 import { GoPersonFill } from 'react-icons/go'
-import { useSession, getSession, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useSelector } from 'react-redux'
 import { SelectorStateProps } from '@/redux/types'
 import CartDrawer from './CartDrawer'
-import { Menu, MenuHandler, MenuList, MenuItem } from '@material-tailwind/react'
 
 export const TopBar = () => {
   const { data: session, status } = useSession()

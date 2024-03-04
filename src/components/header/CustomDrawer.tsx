@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
   Drawer,
   Button,
@@ -12,7 +12,6 @@ import Image from 'next/image'
 import { removeFromCart } from '@/redux/slices'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { FaShoppingBasket } from 'react-icons/fa'
 
 export default function CustomDrawer({
   openRight,
@@ -29,7 +28,6 @@ export default function CustomDrawer({
   const { productsData } = useSelector(
     (state: SelectorStateProps | any) => state.combine.cart,
   )
-  console.log(openRight)
   return (
     <Drawer
       placement="right"

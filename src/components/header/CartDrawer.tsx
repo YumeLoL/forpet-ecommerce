@@ -25,18 +25,6 @@ function CartDrawer() {
         className="h-full flex gap-1 justify-center align-middle items-center"
         onClick={openDrawerRight}
       >
-        {/* {position ? (
-          <>
-            <FaShoppingBasket
-              size={'1.6rem'}
-              className="text-white opacity-90"
-            />
-            <span className="text-white opacity-90">
-              {productsData ? productsData.length : 0}
-            </span>
-          </>
-        ) : (
-          <> */}
         <RiShoppingBasketFill size={20} />
         <span>{productsData ? productsData.length : 0}</span>
       </button>

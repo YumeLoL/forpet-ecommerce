@@ -9,12 +9,7 @@ import { SelectorStateProps, ProductProps } from '@/redux/types'
 import Link from 'next/link'
 import type { NextPageWithLayout } from '../_app'
 import { PrimaryLayout } from '@/layouts'
-import {
-  clearCart,
-  decreaseCount,
-  increaseCount,
-  removeFromCart,
-} from '@/redux/slices'
+import { decreaseCount, increaseCount, removeFromCart } from '@/redux/slices'
 import { api } from '@/utils/api'
 import { Button } from '@material-tailwind/react'
 

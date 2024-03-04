@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { useTranslation } from 'next-i18next'
 import { Collections } from '@/types'
 import { NavLink } from '@/components'
 import { CollectionsPage } from './CollectionsPage'
@@ -9,7 +8,6 @@ import { useSession } from 'next-auth/react'
 import { FaHeart, FaHouseUser } from 'react-icons/fa6'
 import { FaShoppingBasket } from 'react-icons/fa'
 import { TiThMenu } from 'react-icons/ti'
-import CartDrawer from '../header/CartDrawer'
 import CustomDrawer from '../header/CustomDrawer'
 
 interface Props {
@@ -17,16 +15,9 @@ interface Props {
   collections: Collections
 }
 
-interface BottomTab {
-  title: string
-  url: string
-  Icon: any
-}
-
 export const BottomNavigation = ({ navLinks, collections }: Props) => {
   const router = useRouter()
   const { data: session } = useSession()
-  const { t } = useTranslation()
 
   const [currentTab, setCurrentTab] = useState('')
 
@@ -38,12 +29,12 @@ export const BottomNavigation = ({ navLinks, collections }: Props) => {
   const openDrawerRight = () => setOpenRight(true)
   const closeDrawerRight = () => setOpenRight(false)
 
-  const bottomTabs: BottomTab[] = [
-    { title: 'Menu', url: '/#menu', Icon: TiThMenu },
-    { title: 'Cart', url: '/#cart', Icon: FaShoppingBasket },
-    { title: 'Wishlist', url: '/', Icon: FaHeart },
-    { title: 'Profile', url: '/my-account', Icon: FaHouseUser },
-  ]
+  // const bottomTabs: BottomTab[] = [
+  //   { title: 'Menu', url: '/#menu', Icon: TiThMenu },
+  //   { title: 'Cart', url: '/#cart', Icon: FaShoppingBasket },
+  //   { title: 'Wishlist', url: '/', Icon: FaHeart },
+  //   { title: 'Profile', url: '/my-account', Icon: FaHouseUser },
+  // ]
 
   return (
     <>
@@ -71,9 +62,6 @@ export const BottomNavigation = ({ navLinks, collections }: Props) => {
                 size={'1.6rem'}
                 className="text-white opacity-90"
               />
-              {/* <span className="text-white opacity-90">
-              {productsData ? productsData.length : 0}
-            </span> */}
             </div>
           </li>
           <li className="flex-1">
