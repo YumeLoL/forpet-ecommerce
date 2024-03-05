@@ -25,7 +25,7 @@ const trendingItems = [
 
 const MegaMenuSkeletons = () => {
   return (
-    <div>
+    <>
       {Array.from({ length: 4 }).map((_, index) => (
         <div key={index} className="ml-4 w-full max-w-[150px] py-8">
           <div className="h-4 w-full animate-pulse rounded bg-neutral-100" />
@@ -39,7 +39,7 @@ const MegaMenuSkeletons = () => {
           </ul>
         </div>
       ))}
-    </div>
+    </>
   )
 }
 
