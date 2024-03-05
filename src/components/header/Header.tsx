@@ -25,7 +25,7 @@ export const navLinks: NavLink[] = [
   { name: 'contacts', href: '/contacts' },
 ]
 
-export const Header = ({ collections }: { collections: Collections }) => {
+export const Header = () => {
   const [hoveredNavLink, setHoveredNavLink] = useState<NavLink | null>()
 
   const handleShowMenu = (navLink: NavLink) => setHoveredNavLink(navLink)
@@ -81,14 +81,14 @@ export const Header = ({ collections }: { collections: Collections }) => {
           {hoveredNavLink && (
             <MegaMenu
               type={hoveredNavLink.name === 'cat' ? 'CAT' : 'DOG'}
-              collections={collections}
+              // collections={collections}
               onShowMenu={() => handleShowMenu(hoveredNavLink)}
               onCloseMenu={handleCloseMenu}
             />
           )}
         </Transition>
       </div>
-      <BottomNavigation navLinks={navLinks} collections={collections} />
+      {/* <BottomNavigation navLinks={navLinks} collections={collections} /> */}
     </header>
   )
 }

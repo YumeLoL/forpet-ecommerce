@@ -8,16 +8,16 @@ interface PrimaryLayoutProps extends React.PropsWithChildren {
 }
 
 export const PrimaryLayout = ({ seo, children }: PrimaryLayoutProps) => {
-  const { data } = api.collection.all.useQuery()
-
   return (
     <>
-      <NextSeo noindex={true} nofollow={true} {...seo} />
-      <div className="min-h-screen">
-        <Header collections={data} />
-        {children}
-      </div>
-      <Footer />
+      <>
+        <NextSeo noindex={true} nofollow={true} {...seo} />
+        <div className="min-h-screen">
+          <Header />
+          {children}
+        </div>
+        <Footer />
+      </>
     </>
   )
 }

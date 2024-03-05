@@ -3,10 +3,10 @@ import Link from 'next/link'
 import { capitalizeFirstLetter } from '@/utils'
 import { Collections } from '@/types'
 import { CollectionType } from '@prisma/client'
+import { api } from '@/utils/api'
 
 interface Props {
   type: CollectionType
-  collections: Collections
   onShowMenu: () => void
   onCloseMenu: () => void
 }
@@ -23,12 +23,8 @@ const trendingItems = [
   { label: 'Best Options:2 for $39 or 3 for $49', href: '/' },
 ]
 
-export const MegaMenu = ({
-  type,
-  collections,
-  onShowMenu,
-  onCloseMenu,
-}: Props) => {
+export const MegaMenu = ({ type, onShowMenu, onCloseMenu }: Props) => {
+  const { data: collections, isLoading } = api.collection.all.useQuery()
   const typeInLowerCase = type.toString().toLowerCase()
 
   return (
@@ -97,9 +93,13 @@ export const MegaMenu = ({
                   key={collection.id}
                   className="ml-4 w-full max-w-[150px] py-8"
                 >
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                    {collection.name}
-                  </p>
+                  {isLoading ? (
+                    <div className="h-4 w-full animate-pulse  bg-gray-100" />
+                  ) : (
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                      {collection.name}
+                    </p>
+                  )}
 
                   <ul className="pt-2">
                     {collection.children
@@ -108,13 +108,17 @@ export const MegaMenu = ({
                       )
                       .map((subCollection) => (
                         <li key={subCollection.id}>
-                          <Link
-                            href={`/products/${typeInLowerCase}/${collection.slug}?cate=${subCollection.slug}`}
-                            className="mb-1.5 text-xs font-normal text-neutral-700 hover:underline"
-                            onClick={onCloseMenu}
-                          >
-                            {subCollection.name}
-                          </Link>
+                          {isLoading ? (
+                            <div className="h-4 w-full animate-pulse  bg-gray-100" />
+                          ) : (
+                            <Link
+                              href={`/products/${typeInLowerCase}/${collection.slug}?cate=${subCollection.slug}`}
+                              className="mb-1.5 text-xs font-normal text-neutral-700 hover:underline"
+                              onClick={onCloseMenu}
+                            >
+                              {subCollection.name}
+                            </Link>
+                          )}
                         </li>
                       ))}
                   </ul>
