@@ -23,6 +23,26 @@ const trendingItems = [
   { label: 'Best Options:2 for $39 or 3 for $49', href: '/' },
 ]
 
+const MegaMenuSkeletons = () => {
+  return (
+    <div>
+      {Array.from({ length: 4 }).map((_, index) => (
+        <div key={index} className="ml-4 w-full max-w-[150px] py-8">
+          <div className="h-4 w-full animate-pulse rounded bg-neutral-100" />
+
+          <ul className="pt-2">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <li key={index}>
+                <div className="h-6 w-full mb-1 animate-pulse rounded bg-neutral-100" />
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export const MegaMenu = ({ type, onShowMenu, onCloseMenu }: Props) => {
   const { data: collections, isLoading } = api.collection.all.useQuery()
   const typeInLowerCase = type.toString().toLowerCase()
@@ -87,19 +107,17 @@ export const MegaMenu = ({ type, onShowMenu, onCloseMenu }: Props) => {
           </p>
 
           <div className="flex">
-            {collections &&
-              collections.map((collection) => (
+            {isLoading ? (
+              <MegaMenuSkeletons />
+            ) : (
+              collections?.map((collection) => (
                 <div
                   key={collection.id}
                   className="ml-4 w-full max-w-[150px] py-8"
                 >
-                  {isLoading ? (
-                    <div className="h-4 w-full animate-pulse  bg-gray-100" />
-                  ) : (
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
-                      {collection.name}
-                    </p>
-                  )}
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-gray-500">
+                    {collection.name}
+                  </p>
 
                   <ul className="pt-2">
                     {collection.children
@@ -108,22 +126,19 @@ export const MegaMenu = ({ type, onShowMenu, onCloseMenu }: Props) => {
                       )
                       .map((subCollection) => (
                         <li key={subCollection.id}>
-                          {isLoading ? (
-                            <div className="h-4 w-full animate-pulse  bg-gray-100" />
-                          ) : (
-                            <Link
-                              href={`/products/${typeInLowerCase}/${collection.slug}?cate=${subCollection.slug}`}
-                              className="mb-1.5 text-xs font-normal text-neutral-700 hover:underline"
-                              onClick={onCloseMenu}
-                            >
-                              {subCollection.name}
-                            </Link>
-                          )}
+                          <Link
+                            href={`/products/${typeInLowerCase}/${collection.slug}?cate=${subCollection.slug}`}
+                            className="mb-1.5 text-xs font-normal text-neutral-700 hover:underline"
+                            onClick={onCloseMenu}
+                          >
+                            {subCollection.name}
+                          </Link>
                         </li>
                       ))}
                   </ul>
                 </div>
-              ))}
+              ))
+            )}
           </div>
         </div>
       </div>
