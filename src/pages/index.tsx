@@ -27,6 +27,8 @@ const Home: NextPageWithLayout = () => {
       take: 8,
     })
 
+  console.log('is loading?:', isCatLoading, newDog?.products)
+
   return (
     <>
       <Hero />

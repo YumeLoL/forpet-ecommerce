@@ -79,15 +79,15 @@ export const Footer = () => {
             </div>
           </div>
           <div className="mt-5 flex justify-between md:mt-0 md:flex-[2] md:justify-around">
-            {footerLinks.map(({ label, links }) => (
-              <div key={label} className="flex flex-col">
+            {footerLinks.map(({ label, links }, index) => (
+              <div key={label + index} className="flex flex-col">
                 <strong className="mb-5 text-sm font-bold text-neutral-600 md:text-base">
                   {label}
                 </strong>
                 <ul className="flex flex-col gap-2 text-xs font-normal text-neutral-500 md:text-sm">
-                  {links.map(([label, href]) => (
+                  {links.map(([label, href], index) => (
                     <Link
-                      key={href}
+                      key={href + index}
                       href={href}
                       className="transition hover:text-neutral-700"
                     >

@@ -1,9 +1,10 @@
 import { Product } from '@/types'
-import { ProductItem } from '../product/ProductItem'
+import { ProductItem, Skeleton } from '../product/ProductItem'
 import React, { useState } from 'react'
 import { ChevronLeftIcon, ChevronRightIcon, ChevronsRight } from 'lucide-react'
 import Link from 'next/link'
 import useShowCount from '@/hooks/useShowCount'
+import ProductSkeleton from '../ui/ProductSkeleton'
 
 type Props = {
   newCat: Product[] | undefined
@@ -78,11 +79,18 @@ export const NewProducts = ({
             </button>
 
             <div className="w-full flex justify-around overflow-hidden">
+              {isCatLoading &&
+                [...Array(4)]
+                  .slice(currentCatIndex, currentCatIndex + showCount)
+                  .map((_, index) => <ProductSkeleton key={index} />)}
               {newCat &&
                 newCat
                   .slice(currentCatIndex, currentCatIndex + showCount)
                   .map((product, index) => (
-                    <div key={product.id} className="w-full max-w-[230px]">
+                    <div
+                      key={product.id + index}
+                      className="w-full max-w-[230px]"
+                    >
                       <ProductItem {...product} />
                     </div>
                   ))}
@@ -111,11 +119,18 @@ export const NewProducts = ({
             </button>
 
             <div className="w-full flex justify-around overflow-hidden">
+              {isDogLoading &&
+                [...Array(4)]
+                  .slice(currentCatIndex, currentCatIndex + showCount)
+                  .map((_, index) => <ProductSkeleton key={index} />)}
               {newDog &&
                 newDog
                   .slice(currentDogIndex, currentDogIndex + showCount)
-                  .map((product) => (
-                    <div key={product.id} className="w-full max-w-[230px]">
+                  .map((product, index) => (
+                    <div
+                      key={product.id + index}
+                      className="w-full max-w-[230px]"
+                    >
                       <ProductItem {...product} />
                     </div>
                   ))}
