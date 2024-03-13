@@ -1,8 +1,10 @@
 import React from 'react'
 
+// const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent`
+
 export default function ProductSkeleton() {
   return (
-    <div className="h-[470px] max-w-[230px] w-full flex flex-col justify-between group rounded-lg border border-gray-100 p-2 animate-pulse">
+    <div className="h-[470px]  w-full flex flex-col justify-between group rounded-lg border border-gray-100 p-2 animate-pulse">
       <div className="w-full flex flex-col gap-1 justify-between">
         <div className="flex self-center w-full h-[230px] max-w-[230px] overflow-hidden transition bg-gray-100 rounded-lg"></div>
         <div className="flex gap-2">

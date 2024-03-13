@@ -1,5 +1,6 @@
 import { Product } from '@/types'
-import { ProductItem, Skeleton } from './ProductItem'
+import ProductSkeleton from '../ui/ProductSkeleton'
+import { ProductItem } from './ProductItem'
 
 interface Props {
   products: Product[] | undefined
@@ -12,7 +13,7 @@ export const ProductsList = ({ products, isLoading }: Props) => {
       {isLoading &&
         Array(12)
           .fill('')
-          .map((_, index) => <Skeleton key={index} />)}
+          .map((_, index) => <ProductSkeleton key={index} />)}
       {products &&
         products.map((product) => (
           <div key={product.id} className="w-full ">

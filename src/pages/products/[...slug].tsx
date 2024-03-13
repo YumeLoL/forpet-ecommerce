@@ -63,8 +63,11 @@ const Products: NextPageWithLayout = () => {
     [brand, page, gte, lte, rate, sizes, slug, cate],
   )
 
-  const { data, isLoading, isPreviousData } =
+  const { data, isLoading, isFetching, isPreviousData } =
     api.product.all.useQuery(queryInput)
+
+  console.log('check if isLoading', isLoading)
+  console.log('check if isFetching', isFetching)
 
   const pageSize = 12
 

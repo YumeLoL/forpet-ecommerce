@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { Skeleton } from './ProductItem'
 import { Product } from '@/types'
 import clsx from 'clsx'
 import { Rating } from '../ui'
@@ -74,11 +73,6 @@ export default function ProductDetailInfo({ product, isLoading }: Props) {
   return (
     <div className="flex flex-col gap-32 max-w-screen-xl w-full px-8 my-20">
       <div className="flex flex-col md:flex-row justify-space-between w-full">
-        {isLoading &&
-          Array(2)
-            .fill('')
-            .map((_, index) => <Skeleton key={index} />)}
-
         <div className="w-full h-fit md:w-2/3 flex-col gap-4">
           <div className="flex flex-col items-center h-fit md:h-[500px] w-full transition">
             <div className="relative block h-[280px] md:h-full w-[280px] md:w-[400px]">

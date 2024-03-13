@@ -1,5 +1,5 @@
 import { Product } from '@/types'
-import { ProductItem, Skeleton } from '../product/ProductItem'
+import { ProductItem } from '../product/ProductItem'
 import React, { useState } from 'react'
 import { ChevronLeftIcon, ChevronRightIcon, ChevronsRight } from 'lucide-react'
 import Link from 'next/link'
@@ -82,7 +82,11 @@ export const NewProducts = ({
               {isCatLoading &&
                 [...Array(4)]
                   .slice(currentCatIndex, currentCatIndex + showCount)
-                  .map((_, index) => <ProductSkeleton key={index} />)}
+                  .map((_, index) => (
+                    <div className="max-w-[230px] w-full" key={index}>
+                      <ProductSkeleton />
+                    </div>
+                  ))}
               {newCat &&
                 newCat
                   .slice(currentCatIndex, currentCatIndex + showCount)
@@ -122,7 +126,11 @@ export const NewProducts = ({
               {isDogLoading &&
                 [...Array(4)]
                   .slice(currentCatIndex, currentCatIndex + showCount)
-                  .map((_, index) => <ProductSkeleton key={index} />)}
+                  .map((_, index) => (
+                    <div className="max-w-[230px] w-full" key={index}>
+                      <ProductSkeleton />
+                    </div>
+                  ))}
               {newDog &&
                 newDog
                   .slice(currentDogIndex, currentDogIndex + showCount)

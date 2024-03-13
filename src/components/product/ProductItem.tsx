@@ -11,34 +11,6 @@ import { addToCart, decreaseCount, increaseCount } from '@/redux/slices'
 import { SelectorStateProps, ProductProps } from '@/redux/types'
 import Link from 'next/link'
 
-const shimmer = `relative overflow-hidden before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/70 before:to-transparent`
-
-export const Skeleton = () => {
-  return (
-    <div className="rounded-2xl bg-white p-2 ">
-      <div className={`h-[350px] rounded-2xl bg-neutral-200 ${shimmer}`} />
-      <div className="my-3 space-y-3 px-1">
-        <div className="flex gap-2">
-          {Array(4)
-            .fill(0)
-            .map((_, index) => (
-              <div
-                key={index}
-                className={`h-[40px] w-[40px] rounded-full bg-neutral-200 ${shimmer}`}
-              ></div>
-            ))}
-        </div>
-        <div className={`h-4 w-full rounded-lg bg-neutral-200 ${shimmer}`} />
-        <div className={`h-4 w-1/2 rounded-lg bg-neutral-200 ${shimmer}`} />
-        <div className="flex justify-between">
-          <div className={`h-4 w-1/3 rounded-lg bg-neutral-200 ${shimmer}`} />
-          <div className={`h-4 w-1/3 rounded-lg bg-neutral-200 ${shimmer}`} />
-        </div>
-      </div>
-    </div>
-  )
-}
-
 type PriceProps = {
   id: string
   price: number
